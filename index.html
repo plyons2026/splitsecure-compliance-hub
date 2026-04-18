@@ -170,9 +170,9 @@ body{background:#fff;color:#111}
   </div>
 
   <div class="hero">
-    <div class="eye">Compliance hub</div>
-    <div class="hh">Architectural proof of third-party privileged access controls for risk, compliance, and legal teams</div>
-    <div class="hs">Regulators are moving beyond documented policies to verifiable, enforced controls. SplitSecure produces continuous, cryptographically signed evidence that no single party holds sufficient authority to act unilaterally over critical systems.</div>
+    <div class="eye">SplitSecure Global Compliance Hub</div>
+    <div class="hh">From Policy to Mechanism: The Common Thread for Modern GRC</div>
+    <div class="hs">For global financial institutions, the regulatory landscape has shifted. Regulators no longer accept paper compliance — they demand operational reality. SplitSecure provides the architectural bridge that satisfies global mandates for Digital Resilience, Consumer Privacy, and Third-Party Oversight by design.</div>
     <div class="btns">
       <button class="bp" onclick="sw(document.querySelectorAll('.tab')[3],'proof')">How proof is generated ↗</button>
       <button class="bs" onclick="sw(document.querySelectorAll('.tab')[4],'generate')">Generate evidence report</button>
@@ -181,42 +181,42 @@ body{background:#fff;color:#111}
   </div>
 
   <div class="sec">
-    <div class="slbl">Regulatory frameworks addressed</div>
+    <div class="slbl">Global regulatory frameworks addressed</div>
     <div>
       <div class="reg-row" onclick="window.location.href='nydfs-500.html'" style="cursor:pointer">
         <span class="reg-tag t-teal">NYDFS Part 500</span>
-        <div class="reg-name">Access governance</div>
-        <div class="reg-d">Requires third-party privileged access to be governed by technical constraint, not policy documentation.</div>
+        <div class="reg-name">Universal MFA &amp; PAM</div>
+        <div class="reg-d">Meets the Nov 1, 2025 deadline for universal MFA and Class A PAM via hardware-attested, threshold-protected passkeys.</div>
         <span class="reg-a">Compliance dashboard ↗</span>
       </div>
-      <div class="reg-row" onclick="sendPrompt('Show me DORA compliance details')">
+      <div class="reg-row" onclick="window.location.href='dora.html'" style="cursor:pointer">
         <span class="reg-tag t-purple">DORA</span>
-        <div class="reg-name">Concentration risk</div>
-        <div class="reg-d">Mandates visibility into subcontractors and blocks single points of failure in ICT third-party relationships.</div>
-        <span class="reg-a">See mapping ↗</span>
+        <div class="reg-name">Separation of duties</div>
+        <div class="reg-d">Enforces Article 9 mandates for digital resilience by making unilateral admin action mathematically impossible.</div>
+        <span class="reg-a">Compliance dashboard ↗</span>
       </div>
       <div class="reg-row" onclick="sendPrompt('Show me SEC Regulation S-P compliance details')">
         <span class="reg-tag t-coral">SEC Reg S-P</span>
-        <div class="reg-name">Asset protection</div>
-        <div class="reg-d">Requires that no vendor can unilaterally access, modify, or destroy protected customer information.</div>
+        <div class="reg-name">Vendor accountability</div>
+        <div class="reg-d">Fulfills 2024 amendments: firms retain cryptographic sovereignty over data handled by vendors, MSPs, or custodians.</div>
+        <span class="reg-a">See mapping ↗</span>
+      </div>
+      <div class="reg-row" onclick="sendPrompt('Show me MAS TRM compliance details')">
+        <span class="reg-tag t-blue">MAS TRM</span>
+        <div class="reg-name">Dual control</div>
+        <div class="reg-d">Provides technical implementation for dual control of passwords and administrative key management under MAS Technology Risk Management guidelines.</div>
+        <span class="reg-a">See mapping ↗</span>
+      </div>
+      <div class="reg-row" onclick="sendPrompt('Show me PCI DSS compliance details')">
+        <span class="reg-tag t-amber">PCI DSS 4.0</span>
+        <div class="reg-name">No shared IDs</div>
+        <div class="reg-d">Eliminates shared admin credentials (Req 8.5) by attributing every action to unique, physical-device-bound identities.</div>
         <span class="reg-a">See mapping ↗</span>
       </div>
       <div class="reg-row" onclick="sendPrompt('Show me MiCA compliance details')">
         <span class="reg-tag t-blue">MiCA</span>
         <div class="reg-name">Digital asset custody</div>
         <div class="reg-d">Requires multi-party authorization for digital asset custody operations. No single party should hold complete private key authority.</div>
-        <span class="reg-a">See mapping ↗</span>
-      </div>
-      <div class="reg-row" onclick="sendPrompt('Show me FFIEC compliance details')">
-        <span class="reg-tag t-amber">FFIEC</span>
-        <div class="reg-name">Banking operations</div>
-        <div class="reg-d">Shifts examination focus from documented policies to enforced technical controls for authentication and access.</div>
-        <span class="reg-a">See mapping ↗</span>
-      </div>
-      <div class="reg-row" onclick="sendPrompt('Show me NIS2 compliance details')">
-        <span class="reg-tag t-teal">NIS2</span>
-        <div class="reg-name">Critical infrastructure</div>
-        <div class="reg-d">Extends third-party risk requirements beyond financial services to critical infrastructure across the EU.</div>
         <span class="reg-a">See mapping ↗</span>
       </div>
     </div>
@@ -228,6 +228,22 @@ body{background:#fff;color:#111}
     <div class="eye">Threat landscape</div>
     <div class="hh">Why third-party privileged access risk is the defining compliance challenge of 2026</div>
     <div class="hs">The threat landscape has shifted from perimeter attacks to supply chain exploitation. Attackers no longer need to breach an enterprise directly — they target the vendors with standing privileged access to thousands of customer environments simultaneously.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">The architectural common thread: compliant by default</div>
+    <div class="g2" style="margin-bottom:12px">
+      <div class="surf" style="background:#1a1630;border-radius:10px;padding:18px 20px">
+        <div class="st" style="color:#fff;margin-bottom:8px">Traditional compliance</div>
+        <div class="sd" style="color:rgba(255,255,255,0.5)">Relies on human discretion. An admin promises not to share the password. A vendor attests to following the policy. A questionnaire captures intent. The gap between what is claimed and what is enforced is where breaches occur.</div>
+        <div style="margin-top:10px"><span class="badge" style="background:rgba(250,236,231,0.15);color:#f87171">Policy-dependent</span></div>
+      </div>
+      <div class="surf" style="background:#534AB7;border-radius:10px;padding:18px 20px">
+        <div class="st" style="color:#fff;margin-bottom:8px">SplitSecure: cryptographic mechanism</div>
+        <div class="sd" style="color:rgba(255,255,255,0.6)">Replaces discretion with mathematical proof. Zero Knowledge Infrastructure means SplitSecure cannot reconstruct keys or access data. Threshold quorums enforce separation of duties at the protocol layer. Self-auditing protocols produce tamper-evident records as a byproduct of access — not a separate log.</div>
+        <div style="margin-top:10px"><span class="badge ok-bg">Architecturally enforced</span></div>
+      </div>
+    </div>
   </div>
   <div class="sec">
     <div class="slbl">Key risk drivers</div>
@@ -293,36 +309,42 @@ body{background:#fff;color:#111}
     <div class="hs">For years, regulators accepted documented policies as sufficient evidence of controls. The 2026 compliance landscape marks a structural shift. Regulators now distinguish between a policy, which can be ignored or overridden, and a mechanism, which is architecturally enforced. Vendor-hosted PAM satisfies the former. SplitSecure satisfies the latter.</div>
   </div>
   <div class="sec">
-    <div class="slbl">Framework requirements and SplitSecure mapping</div>
+    <div class="slbl">Global regulatory mapping</div>
     <div>
       <div class="reg-row" onclick="window.location.href='nydfs-500.html'" style="cursor:pointer">
         <span class="reg-tag t-teal">NYDFS Part 500</span>
-        <div class="reg-name">Access governance</div>
-        <div class="reg-d">Requires PAM implementation and limits privileged accounts to strictly necessary functions. Third-party access must be governed by technical constraint. No single party should hold unilateral authority.</div>
+        <div class="reg-name">Universal MFA &amp; PAM</div>
+        <div class="reg-d">Meets the Nov 1, 2025 deadline for universal MFA and Class A PAM via hardware-attested, threshold-protected passkeys.</div>
         <span class="reg-a">Full dashboard ↗</span>
       </div>
-      <div class="reg-row" onclick="sendPrompt('Show me full DORA compliance details')">
+      <div class="reg-row" onclick="window.location.href='dora.html'" style="cursor:pointer">
         <span class="reg-tag t-purple">DORA</span>
-        <div class="reg-name">ICT concentration risk</div>
-        <div class="reg-d">Mandates controls on ICT third-party concentration risk. Vendor-hosted PAM creates exactly the concentration DORA is written to eliminate. Requires visibility into subcontractors and resilience against single points of failure.</div>
-        <span class="reg-a">See mapping ↗</span>
+        <div class="reg-name">Separation of duties</div>
+        <div class="reg-d">Enforces Article 9 mandates for digital resilience by making unilateral admin action mathematically impossible. Vendor-hosted PAM creates exactly the concentration DORA is written to eliminate.</div>
+        <span class="reg-a">Full dashboard ↗</span>
       </div>
       <div class="reg-row" onclick="sendPrompt('Show me full SEC Regulation S-P compliance details')">
         <span class="reg-tag t-coral">SEC Reg S-P</span>
-        <div class="reg-name">Asset protection</div>
-        <div class="reg-d">No vendor should hold sufficient authority to unilaterally access, modify, or destroy protected customer assets. Vendor-hosted PAM fails this requirement by design.</div>
+        <div class="reg-name">Vendor accountability</div>
+        <div class="reg-d">Fulfills 2024 amendments: firms retain cryptographic sovereignty over data handled by vendors, MSPs, or custodians. No vendor can unilaterally access, modify, or destroy protected customer assets.</div>
+        <span class="reg-a">See mapping ↗</span>
+      </div>
+      <div class="reg-row" onclick="sendPrompt('Show me full MAS TRM compliance details')">
+        <span class="reg-tag t-blue">MAS TRM</span>
+        <div class="reg-name">Dual control</div>
+        <div class="reg-d">Provides technical implementation for dual control of passwords and administrative key management. Every action requires independent quorum approval — dual control is architecturally enforced, not procedurally documented.</div>
+        <span class="reg-a">See mapping ↗</span>
+      </div>
+      <div class="reg-row" onclick="sendPrompt('Show me full PCI DSS compliance details')">
+        <span class="reg-tag t-amber">PCI DSS 4.0</span>
+        <div class="reg-name">No shared IDs</div>
+        <div class="reg-d">Eliminates shared admin credentials (Req 8.5) by attributing every action to unique, physical-device-bound identities. Attribution is device-level and cryptographically unforgeable.</div>
         <span class="reg-a">See mapping ↗</span>
       </div>
       <div class="reg-row" onclick="sendPrompt('Show me full MiCA compliance details')">
         <span class="reg-tag t-blue">MiCA</span>
         <div class="reg-name">Digital asset custody</div>
         <div class="reg-d">Requires multi-party authorization controls for digital asset custody. Private keys governing digital assets must not be reconstructible by any single party, including the custody service provider.</div>
-        <span class="reg-a">See mapping ↗</span>
-      </div>
-      <div class="reg-row" onclick="sendPrompt('Show me full FFIEC compliance details')">
-        <span class="reg-tag t-amber">FFIEC</span>
-        <div class="reg-name">Banking operations</div>
-        <div class="reg-d">Examiners now assess whether privileged access controls are architecturally enforced or merely documented. Approval workflows and access reviews are no longer considered sufficient evidence of control.</div>
         <span class="reg-a">See mapping ↗</span>
       </div>
       <div class="reg-row" onclick="sendPrompt('Show me full NIS2 compliance details')">
@@ -347,14 +369,14 @@ body{background:#fff;color:#111}
         <span class="sa" onclick="sendPrompt('Tell me more about agentic AI governance compliance requirements')">Learn more ↗</span>
       </div>
       <div class="surf">
+        <div class="st">AI and deepfake resistance — NYDFS Oct 2024</div>
+        <div class="sd">NYDFS identifies deepfakes as a primary threat to financial authentication and recommends controls that withstand AI manipulation. SplitSecure mandates hardware attestation on every protocol message — a deepfake cannot spoof the cryptographic proof generated by an unmodified Apple or Android runtime.</div>
+        <span class="sa" onclick="sendPrompt('Tell me more about AI deepfake resistance in SplitSecure')">Learn more ↗</span>
+      </div>
+      <div class="surf">
         <div class="st">Post-quantum cryptography mandates</div>
         <div class="sd">NIST finalized post-quantum cryptography standards in 2024. The EU published a PQC implementation roadmap in 2025. US federal agencies are required to migrate by 2035. Financial services are next.</div>
         <span class="sa" onclick="sendPrompt('Tell me more about post-quantum cryptography compliance requirements')">Learn more ↗</span>
-      </div>
-      <div class="surf">
-        <div class="st">SplitSecure already satisfies these requirements</div>
-        <div class="sd">Shamir Secret Sharing eliminates persistent secrets entirely. There is nothing to harvest, nothing to replay, nothing to inherit — regardless of what computing power is brought to bear.</div>
-        <span class="sa" onclick="sendPrompt('How does SplitSecure satisfy future compliance requirements?')">Learn more ↗</span>
       </div>
     </div>
   </div>
@@ -363,54 +385,83 @@ body{background:#fff;color:#111}
 <div id="pg-proof" class="page">
   <div class="hero">
     <div class="eye">Proof of compliance</div>
-    <div class="hh">Architectural proof, not self-reported attestation</div>
+    <div class="hh">Three pillars of the SplitSecure compliance model</div>
     <div class="hs">SplitSecure produces continuous, cryptographically signed evidence that privileged access controls are enforced. Not assembled for audit. Generated by the mechanism itself. Every record is immutable, bound to the approver identities and runtime, and independently verifiable.</div>
   </div>
   <div class="sec">
-    <div class="slbl">How SplitSecure generates compliance evidence</div>
+    <div class="slbl">Pillar 1 — Privileged access (PAM/IAM)</div>
+    <div class="g2" style="margin-bottom:20px">
+      <div class="surf" style="background:#FAECE7">
+        <div class="st">The problem with traditional vaults</div>
+        <div class="sd" style="color:#712B13">Traditional vaults and HSMs are single points of failure. If the vault is breached, the organization's last secret is exposed. Every customer credential held by the PAM vendor becomes accessible simultaneously.</div>
+      </div>
+      <div class="surf">
+        <div class="st">The SplitSecure mechanism</div>
+        <div class="sd">Secrets are split into fragments across devices you control. They are reconstructed ephemerally inside attested runtimes and immediately discarded. There is no master key for an attacker or a rogue insider to steal.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Verified</span></div>
+      </div>
+    </div>
+    <div class="slbl">Pillar 2 — Third-party risk management (TPRM)</div>
+    <div class="g2" style="margin-bottom:20px">
+      <div class="surf" style="background:#FAECE7">
+        <div class="st">The accountability problem</div>
+        <div class="sd" style="color:#712B13">Regulators — NYDFS, SEC, DORA — now emphasize that accountability cannot be delegated. Handing credentials to a Managed Service Provider is a compliance violation if they can act unilaterally.</div>
+      </div>
+      <div class="surf">
+        <div class="st">The SplitSecure mechanism</div>
+        <div class="sd">Vendors initiate a proposal. Your internal team provides quorum approval on their own physical devices. Access is tightly scoped, time-limited, and context-aware — who, what, where, how long. The vendor never holds a complete credential.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Verified</span></div>
+      </div>
+    </div>
+    <div class="slbl">Pillar 3 — Auditing and forensic evidence</div>
+    <div class="g2" style="margin-bottom:20px">
+      <div class="surf" style="background:#FAECE7">
+        <div class="st">The log aggregation problem</div>
+        <div class="sd" style="color:#712B13">Log aggregation can be altered or deleted by attackers with administrative rights. Traditional audit trails are a separate layer — added after the fact, and removable by the same accounts they are meant to monitor.</div>
+      </div>
+      <div class="surf">
+        <div class="st">The SplitSecure mechanism</div>
+        <div class="sd">Every proposal, vote, and result is recorded as a cryptographic audit observation — SHA3-512 hashed. The audit trail is a byproduct of the access mechanism itself, not a separate log. It meets 5-year retention for material transactions and 3-year retention for security events.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Verified</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="slbl">The examiner-ready evidence suite</div>
     <div>
       <div class="prow">
         <div class="pnum">01</div>
         <div>
-          <div class="pt">No complete credential is ever stored — architecturally verified</div>
-          <div class="pd">Every credential is split using Shamir Secret Sharing across independent devices. Deployment attestation confirms no single device holds a complete credential. This is not a contractual promise — it is cryptographically enforced and independently verifiable.</div>
-          <div class="pev">Evidence: Shamir Secret Sharing deployment attestation, shard distribution record</div>
+          <div class="pt">Regulatory attestation — zero knowledge infrastructure</div>
+          <div class="pd">Proof that SplitSecure — the provider — has zero access to customer keys. SplitSecure cannot reconstruct keys, forge signatures, or act on customer systems. Satisfies non-delegable responsibility mandates under NYDFS §500.11, SEC Reg S-P, and DORA Article 28.</div>
+          <div class="pev">Evidence: customer-hosted deployment attestation, vendor sovereignty certificate</div>
         </div>
         <div style="min-width:80px;text-align:right;padding-top:2px"><span class="badge ok-bg">Verifiable</span></div>
       </div>
       <div class="prow">
         <div class="pnum">02</div>
         <div>
-          <div class="pt">Every privileged action requires quorum approval — logged immutably</div>
-          <div class="pd">No single party can execute a privileged action unilaterally. Every action produces a cryptographically signed, time-stamped record bound to the approver identities and attested runtime. The record cannot be altered after the fact because it is a byproduct of the enforcement mechanism.</div>
-          <div class="pev">Evidence: quorum approval log, zero single-approver actions</div>
+          <div class="pt">Quorum integrity report — no unilateral authority</div>
+          <div class="pd">Verifiable proof that no individual holds sufficient authority to act alone. Documents the k-of-n threshold currently in force, enrolled devices, and authorized parties for each protected system. Current at time of examiner request — not a point-in-time snapshot.</div>
+          <div class="pev">Evidence: quorum configuration report, Shamir shard distribution record</div>
         </div>
         <div style="min-width:80px;text-align:right;padding-top:2px"><span class="badge ok-bg">Verifiable</span></div>
       </div>
       <div class="prow">
         <div class="pnum">03</div>
         <div>
-          <div class="pt">Production and recovery credentials are governed independently</div>
-          <div class="pd">Production systems and recovery systems require separate, independent quorum groups. A compromise of production credentials cannot reach recovery systems. The architectural condition that caused the CloudNordic total loss is impossible in a SplitSecure-protected environment.</div>
-          <div class="pev">Evidence: quorum group independence attestation, separation of duties record</div>
+          <div class="pt">Tamper-evident SIEM export — forensic reconstructibility</div>
+          <div class="pd">Machine-readable records of every proposal, vote, and execution result — SHA3-512 hashed and cryptographically bound to approver identities and attested runtime. Exportable for rapid incident response and annual certification. Meets 5-year retention for material financial transactions and 3-year for security events.</div>
+          <div class="pev">Evidence: continuous cryptographic audit feed, framework-mapped compliance report</div>
         </div>
         <div style="min-width:80px;text-align:right;padding-top:2px"><span class="badge ok-bg">Verifiable</span></div>
       </div>
       <div class="prow">
         <div class="pnum">04</div>
         <div>
-          <div class="pt">SplitSecure holds no customer credentials — vendor sovereignty confirmed</div>
-          <div class="pd">Customer-hosted deployment. SplitSecure's infrastructure cannot reconstruct keys, forge signatures, or act on customer systems. Vendor sovereignty certificate confirms the PAM vendor supply chain dependency is eliminated.</div>
-          <div class="pev">Evidence: customer-hosted deployment attestation, vendor sovereignty certificate</div>
-        </div>
-        <div style="min-width:80px;text-align:right;padding-top:2px"><span class="badge ok-bg">Verifiable</span></div>
-      </div>
-      <div class="prow">
-        <div class="pnum">05</div>
-        <div>
-          <div class="pt">Machine-readable compliance reporting — exportable for regulators</div>
-          <div class="pd">Continuous, structured evidence exportable for regulatory submission, audit review, or examiner inspection. Mapped to NYDFS Part 500, DORA, SEC Reg S-P, MiCA, FFIEC, and NIS2 control frameworks. No manual assembly required before each audit cycle.</div>
-          <div class="pev">Evidence: continuous audit record feed, framework-mapped compliance report</div>
+          <div class="pt">Third-party oversight report — §500.11 and DORA Article 30</div>
+          <div class="pd">Filtered view of all vendor-originated access events, proving they were subject to the same threshold controls as internal users. Documents which vendors accessed which systems, when, and under which quorum approval. Satisfies NYDFS, DORA, and SEC Reg S-P third-party oversight requirements.</div>
+          <div class="pev">Evidence: vendor access log, quorum approval records for third-party events</div>
         </div>
         <div style="min-width:80px;text-align:right;padding-top:2px"><span class="badge ok-bg">Verifiable</span></div>
       </div>
@@ -427,13 +478,13 @@ body{background:#fff;color:#111}
   <div class="sec">
     <div class="slbl">Select a framework</div>
     <div class="g3">
-      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a NYDFS Part 500 compliance evidence report')">
+      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="window.location.href='nydfs-500.html'">
         <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#E1F5EE;color:#085041;display:inline-block;margin-bottom:8px">NYDFS Part 500</span>
         <div class="st">Privileged access governance</div>
-        <div class="sd">PAM implementation, privileged account limits, third-party access governance. Includes compliance dashboard and examiner evidence report.</div>
+        <div class="sd">PAM implementation, universal MFA mandate, Class A requirements, third-party access governance. Includes full compliance dashboard and examiner evidence report.</div>
         <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
       </div>
-      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a DORA compliance evidence report')">
+      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="window.location.href='dora.html'">
         <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#EEEDFE;color:#3C3489;display:inline-block;margin-bottom:8px">DORA</span>
         <div class="st">ICT concentration risk</div>
         <div class="sd">Third-party concentration controls, vendor sovereignty attestation, operational resilience evidence for Articles 28 and 30.</div>
@@ -441,26 +492,26 @@ body{background:#fff;color:#111}
       </div>
       <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a SEC Regulation S-P compliance evidence report')">
         <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#FAECE7;color:#712B13;display:inline-block;margin-bottom:8px">SEC Reg S-P</span>
-        <div class="st">Asset protection</div>
-        <div class="sd">Credential governance and third-party oversight evidence for SEC Regulation S-P safeguards rule compliance.</div>
+        <div class="st">Vendor accountability</div>
+        <div class="sd">Credential governance and cryptographic sovereignty evidence for SEC Regulation S-P safeguards rule compliance.</div>
+        <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
+      </div>
+      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a MAS TRM compliance evidence report')">
+        <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#E6F1FB;color:#0C447C;display:inline-block;margin-bottom:8px">MAS TRM</span>
+        <div class="st">Dual control</div>
+        <div class="sd">Technical implementation evidence for dual control of passwords and administrative key management under MAS Technology Risk Management guidelines.</div>
+        <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
+      </div>
+      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a PCI DSS compliance evidence report')">
+        <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#FAEEDA;color:#633806;display:inline-block;margin-bottom:8px">PCI DSS 4.0</span>
+        <div class="st">No shared IDs</div>
+        <div class="sd">Shared credential elimination evidence for PCI DSS Requirement 8.5. Every action attributed to unique, physical-device-bound identities.</div>
         <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
       </div>
       <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a MiCA compliance evidence report')">
         <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#E6F1FB;color:#0C447C;display:inline-block;margin-bottom:8px">MiCA</span>
         <div class="st">Digital asset custody</div>
         <div class="sd">Multi-party authorization evidence for digital asset private key custody operations under MiCA requirements.</div>
-        <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
-      </div>
-      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a FFIEC compliance evidence report')">
-        <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#FAEEDA;color:#633806;display:inline-block;margin-bottom:8px">FFIEC</span>
-        <div class="st">Banking operations</div>
-        <div class="sd">Enforced technical controls evidence for FFIEC cybersecurity examination requirements for authentication and access.</div>
-        <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
-      </div>
-      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a NIS2 compliance evidence report')">
-        <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#E1F5EE;color:#085041;display:inline-block;margin-bottom:8px">NIS2</span>
-        <div class="st">Critical infrastructure</div>
-        <div class="sd">Third-party risk controls evidence for NIS2 requirements across EU critical infrastructure operators.</div>
         <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
       </div>
     </div>

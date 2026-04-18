@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SplitSecure — DORA Compliance</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{background:#fff;color:#111}
+
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:0.5px solid #e0e0e0;background:#fff}
+.logo{font-size:15px;font-weight:500;color:#111}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:#888}
+.bc a{color:#534AB7;text-decoration:none;cursor:pointer}
+.bc a:hover{text-decoration:underline}
+.nav-cta{font-size:13px;color:#fff;background:#534AB7;padding:7px 16px;border-radius:8px;cursor:pointer;border:none}
+.nav-cta:hover{background:#3C3489}
+
+.tabs{display:flex;border-bottom:0.5px solid #e0e0e0;padding:0 24px;background:#f9f9f7;overflow-x:auto}
+.tab{font-size:12px;color:#888;padding:9px 16px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.tab.on{color:#534AB7;border-bottom-color:#534AB7;font-weight:500}
+.tab:hover:not(.on){color:#111}
+.page{display:none}.page.on{display:block}
+
+.vid-section{display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #e0e0e0;min-height:320px}
+.vid-left{background:#1a1630;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:320px}
+.vid-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.vid-avatar{width:100px;height:100px;border-radius:50%;background:#2d2550;border:2px solid #534AB7;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:500;color:#EEEDFE}
+.vid-name{font-size:14px;font-weight:500;color:#EEEDFE}
+.vid-role{font-size:12px;color:#AFA9EC;text-align:center;max-width:180px;line-height:1.4}
+.play-ring{width:48px;height:48px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;margin-top:6px}
+.play-ring:hover{background:#3C3489}
+.vid-label{font-size:12px;color:#7F77DD;margin-top:2px}
+.vid-right{background:#f9f9f7;padding:22px 26px;display:flex;flex-direction:column;justify-content:center}
+.vid-right-head{font-size:11px;font-weight:500;color:#534AB7;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.chapter{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid #e0e0e0;cursor:pointer}
+.chapter:last-child{border-bottom:none}
+.chapter:hover .ch-t{color:#534AB7}
+.ch-time{font-size:11px;color:#534AB7;font-weight:500;min-width:34px;padding-top:1px;font-family:monospace}
+.ch-body{flex:1}
+.ch-t{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.ch-d{font-size:11px;color:#888;line-height:1.5}
+.ch-aud{font-size:10px;padding:2px 6px;border-radius:4px;background:#EEEDFE;color:#3C3489;display:inline-block;margin-top:2px}
+
+.hero{padding:22px 24px 16px;border-bottom:0.5px solid #e0e0e0}
+.eye{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;margin-bottom:6px}
+.hh{font-size:18px;font-weight:500;line-height:1.3;max-width:580px;margin-bottom:6px;color:#111}
+.hs{font-size:13px;color:#666;line-height:1.6;max-width:520px;margin-bottom:12px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.bp{font-size:13px;background:#534AB7;color:#EEEDFE;padding:7px 16px;border-radius:8px;cursor:pointer;border:none;font-family:inherit}
+.bp:hover{background:#3C3489}
+.bs{font-size:13px;color:#111;border:0.5px solid #ccc;padding:7px 16px;border-radius:8px;cursor:pointer;background:none;font-family:inherit}
+.bs:hover{background:#f9f9f7}
+
+.sec{padding:20px 24px;border-bottom:0.5px solid #e0e0e0}
+.slbl{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#aaa;margin-bottom:12px}
+
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+
+.metric{background:#f9f9f7;border-radius:8px;padding:14px;text-align:center}
+.m-val{font-size:20px;font-weight:500;color:#534AB7}
+.m-lbl{font-size:12px;color:#666;margin-top:3px;line-height:1.4}
+
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.ok-bg{background:#E1F5EE;color:#085041}
+.warn-bg{background:#FAEEDA;color:#633806}
+.na-bg{background:#EEEDFE;color:#3C3489}
+.fail-bg{background:#FAECE7;color:#712B13}
+
+.surf{background:#f9f9f7;border-radius:10px;padding:14px 16px}
+.st{font-size:13px;font-weight:500;color:#111;margin-bottom:4px}
+.sd{font-size:12px;color:#666;line-height:1.5;margin-bottom:5px}
+.sa{font-size:12px;color:#534AB7;cursor:pointer}
+
+.req-row{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:0.5px solid #e0e0e0}
+.req-row:last-child{border-bottom:none}
+.req-section{font-size:11px;font-weight:600;color:#534AB7;min-width:80px;padding-top:1px;font-family:monospace}
+.req-body{flex:1}
+.req-title{font-size:13px;font-weight:500;color:#111;margin-bottom:3px}
+.req-desc{font-size:12px;color:#666;line-height:1.55}
+.req-status{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;min-width:90px}
+
+.map-table{width:100%;border-collapse:collapse}
+.map-table th{padding:9px 12px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#aaa;text-align:left;border-bottom:0.5px solid #e0e0e0}
+.map-table th.ss{color:#534AB7}
+.map-table td{padding:12px;font-size:12px;line-height:1.5;border-bottom:0.5px solid #e0e0e0;vertical-align:top}
+.map-table td.sec-col{font-size:11px;font-weight:600;color:#534AB7;font-family:monospace;width:100px}
+.map-table td.req-col{color:#111;width:200px}
+.map-table td.ss-col{color:#111}
+.map-table td.meth-col{color:#666}
+.map-table tr:last-child td{border-bottom:none}
+.map-table tr:hover td{background:#f9f9f7}
+
+.terminal{background:#0d1117;border-radius:10px;overflow:hidden;margin-bottom:12px}
+.term-hdr{display:flex;align-items:center;gap:6px;padding:9px 14px;background:#161b22;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.td-dot{width:9px;height:9px;border-radius:50%}
+.term-lbl{font-size:11px;color:rgba(255,255,255,0.25);margin-left:8px;font-family:monospace}
+.term-body{padding:14px 16px;font-family:'Courier New',monospace;font-size:11px;line-height:1.8;color:rgba(255,255,255,0.65)}
+.tk{color:#79c0ff}.ts{color:#a5d6ff}.tv{color:#56d364}.tc{color:rgba(255,255,255,0.25)}
+.i1{padding-left:14px}.i2{padding-left:28px}
+
+.threat-row{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid #e0e0e0}
+.threat-row:last-child{border-bottom:none}
+.thr-yr{font-size:11px;font-weight:500;color:#534AB7;min-width:40px;padding-top:1px}
+.thr-t{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.thr-d{font-size:12px;color:#666;line-height:1.5}
+
+.prow{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid #e0e0e0}
+.prow:last-child{border-bottom:none}
+.pnum{font-size:16px;font-weight:500;color:#534AB7;min-width:24px}
+.pt{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.pd{font-size:12px;color:#666;line-height:1.5}
+.pev{font-size:11px;color:#aaa;margin-top:2px;font-style:italic}
+
+.callout{background:#1a1630;border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.callout-eye{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:5px}
+.callout-title{font-size:15px;font-weight:500;color:#fff;margin-bottom:6px;line-height:1.3}
+.callout-body{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7}
+
+.step-flow{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:14px;padding:13px 0;border-bottom:0.5px solid #e0e0e0;align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step-num{width:28px;height:28px;border-radius:50%;background:#534AB7;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-title{font-size:13px;font-weight:500;color:#111;margin-bottom:3px}
+.step-desc{font-size:12px;color:#666;line-height:1.55}
+.step-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;background:#EEEDFE;color:#3C3489;border-radius:3px;margin-top:4px}
+
+.checklist-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid #e0e0e0}
+.checklist-item:last-child{border-bottom:none}
+.ci-check{width:18px;height:18px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:10px;color:#085041}
+.ci-title{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.ci-desc{font-size:12px;color:#666;line-height:1.5}
+.ci-ev{font-size:11px;color:#aaa;margin-top:2px;font-style:italic}
+
+.foot{padding:20px 24px;background:#EEEDFE}
+.ft{font-size:14px;font-weight:500;color:#26215C;margin-bottom:4px}
+.fd{font-size:12px;color:#3C3489;margin-bottom:12px;line-height:1.5}
+.foot-btns{display:flex;gap:8px}
+.foot-btn-p{font-size:13px;background:#534AB7;color:#EEEDFE;padding:8px 18px;border-radius:8px;cursor:pointer;border:none;font-family:inherit}
+.foot-btn-p:hover{background:#3C3489}
+.foot-btn-s{font-size:13px;color:#534AB7;border:0.5px solid #534AB7;padding:8px 18px;border-radius:8px;cursor:pointer;background:none;font-family:inherit}
+.foot-btn-s:hover{background:rgba(83,74,183,0.05)}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div style="display:flex;align-items:center;gap:16px">
+    <span class="logo">SplitSecure</span>
+    <div class="bc">
+      <a href="index.html">Compliance</a>
+      <span>›</span>
+      <a href="index.html">Compliance hub</a>
+      <span>›</span>
+      <span style="color:#111">DORA</span>
+    </div>
+  </div>
+  <button class="nav-cta">Get in touch ↗</button>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="sw(this,'overview')">Overview</button>
+  <button class="tab" onclick="sw(this,'mapping')">Article mapping</button>
+  <button class="tab" onclick="sw(this,'separation')">Separation of duties</button>
+  <button class="tab" onclick="sw(this,'tprm')">ICT third-party risk</button>
+  <button class="tab" onclick="sw(this,'evidence')">Audit &amp; evidence</button>
+  <button class="tab" onclick="sw(this,'checklist')">Readiness checklist</button>
+</div>
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="pg-overview" class="page on">
+
+  <div class="vid-section">
+    <div class="vid-left">
+      <div class="vid-overlay">
+        <div class="vid-avatar">TM</div>
+        <div class="vid-name">Tristan Morris</div>
+        <div class="vid-role">SplitSecure — DORA compliance briefing</div>
+        <button class="play-ring">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><polygon points="6,3 15,9 6,15" fill="#EEEDFE"/></svg>
+        </button>
+        <div class="vid-label">4 min overview</div>
+      </div>
+    </div>
+    <div class="vid-right">
+      <div class="vid-right-head">What this briefing covers</div>
+      <div class="chapter"><div class="ch-time">0:00</div><div class="ch-body"><div class="ch-t">Who this is for</div><div class="ch-d">CISOs, CROs, and compliance officers at EU financial entities navigating DORA's ICT resilience obligations</div><span class="ch-aud">CISO · CRO · Compliance</span></div></div>
+      <div class="chapter"><div class="ch-time">0:30</div><div class="ch-body"><div class="ch-t">DORA as a resilience mandate, not just a security policy</div><div class="ch-d">Why ICT risk management must now be treated as a function of business continuity — not a separate compliance workstream</div><span class="ch-aud">CRO · Compliance · Legal</span></div></div>
+      <div class="chapter"><div class="ch-time">1:20</div><div class="ch-body"><div class="ch-t">Eliminating single points of failure — Article 9</div><div class="ch-d">How k-of-n threshold cryptography replaces administrative trust with architectural resilience</div><span class="ch-aud">CISO · Architecture</span></div></div>
+      <div class="chapter"><div class="ch-time">2:10</div><div class="ch-body"><div class="ch-t">ICT third-party risk — Articles 28–30</div><div class="ch-d">Why accountability cannot be delegated and how ephemeral threshold access satisfies DORA's non-delegable responsibility standard</div><span class="ch-aud">CRO · Compliance</span></div></div>
+      <div class="chapter"><div class="ch-time">3:10</div><div class="ch-body"><div class="ch-t">Forensic reconstructibility for incident reporting</div><div class="ch-d">SHA3-512 hashed tamper-evident audit trails generated by the access mechanism — not a separate logging layer</div><span class="ch-aud">All audiences</span></div></div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="eye">DORA — SplitSecure Compliance Hub</div>
+    <div class="hh">Architectural Resilience for the Digital Operational Resilience Act</div>
+    <div class="hs">DORA represents a paradigm shift for EU financial entities, moving from traditional risk management to operational resilience. Regulators now require proof that ICT systems can withstand, respond to, and recover from severe disruptions. SplitSecure provides the mathematical foundation for this resilience by eliminating single points of failure in the access control layer.</div>
+    <div class="btns">
+      <button class="bp" onclick="sw(document.querySelectorAll('.tab')[1],'mapping')">See article mapping ↗</button>
+      <button class="bs" onclick="sw(document.querySelectorAll('.tab')[4],'evidence')">How evidence is generated</button>
+      <button class="bs" onclick="sw(document.querySelectorAll('.tab')[5],'checklist')">Generate readiness report</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Why DORA is different</div>
+    <div class="g4">
+      <div class="metric"><div class="m-val">Jan 2025</div><div class="m-lbl">DORA fully applicable — all EU financial entities and ICT third-party providers in scope</div></div>
+      <div class="metric"><div class="m-val">Art. 9</div><div class="m-lbl">Separation of duties — no single user should hold excessive permissions over critical ICT systems</div></div>
+      <div class="metric"><div class="m-val">Art. 28</div><div class="m-lbl">Non-delegable responsibility — financial entities remain accountable for ICT risk even when outsourced</div></div>
+      <div class="metric"><div class="m-val">Art. 18</div><div class="m-lbl">Incident reporting — tamper-evident audit trails required for forensic reconstruction and regulatory submission</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">From administrative trust to architectural resilience</div>
+    <div class="callout">
+      <div class="callout-eye">DORA — EU 2022/2554</div>
+      <div class="callout-title">DORA differs from previous regulations by treating ICT risk as a function of business continuity. A single compromised vault or administrator is a resilience failure, not just a security incident.</div>
+      <div class="callout-body">Traditional compliance relies on administrative trust — the assumption that administrators will follow procedures, vendors will honour contractual commitments, and access controls documented in policy will be enforced in practice. DORA rejects this model. If a single administrator or a single compromised vault can bring down a critical financial service, the entity is non-compliant with DORA's resilience standards regardless of what the policy says. SplitSecure replaces administrative trust with architectural resilience — the k-of-n quorum model ensures that even if a device is destroyed or an admin is compromised, the integrity and availability of critical ICT functions remain intact.</div>
+    </div>
+    <div class="g2">
+      <div class="surf" style="background:#FAECE7">
+        <div class="st">What DORA identifies as non-compliant</div>
+        <div class="sd" style="color:#712B13">A single administrator with sufficient access to disrupt critical services. A single vendor with standing access to sensitive systems. A PAM vault whose compromise simultaneously exposes all customer credentials. Log-based audit trails that an attacker with admin rights can alter or delete.</div>
+        <div style="margin-top:8px"><span class="badge fail-bg">Single point of failure</span></div>
+      </div>
+      <div class="surf">
+        <div class="st">What SplitSecure provides</div>
+        <div class="sd">No single device, admin, or vendor holds sufficient authority to act alone. Secrets reconstructed ephemerally inside attested runtimes for one operation, then discarded. Every action produces a tamper-evident cryptographic observation. The architectural condition that caused the CloudNordic total loss is structurally impossible.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Architecturally resilient</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Key articles addressed by SplitSecure</div>
+    <div class="req-row">
+      <div class="req-section">Art. 9</div>
+      <div class="req-body"><div class="req-title">Separation of duties</div><div class="req-desc">Enforces the separation of duties mandate by making unilateral administrative action mathematically impossible through threshold quorums. No single user holds excessive permissions.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Art. 15</div>
+      <div class="req-body"><div class="req-title">ICT risk control</div><div class="req-desc">Minimizes ICT risk impact by ensuring no persistent plaintext keys exist on disk — eliminating the "last secret" liability that makes vault compromise catastrophic.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Art. 28</div>
+      <div class="req-body"><div class="req-title">Third-party risk — non-delegable responsibility</div><div class="req-desc">Satisfies the non-delegable responsibility standard for ICT vendors. MSPs cannot act unilaterally on your systems — they require a live internal quorum from your own team's attested devices.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Art. 7</div>
+      <div class="req-body"><div class="req-title">ICT tool resilience</div><div class="req-desc">Uses attested runtimes (Apple App Attest and AWS Nitro) to prove code integrity, ensuring ICT tools have not been tampered with by an operator or OS-level compromise.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Art. 18</div>
+      <div class="req-body"><div class="req-title">Incident reporting</div><div class="req-desc">Provides SHA3-512 hashed, tamper-evident audit trails that serve as forensic reconstructibility for major ICT-related incidents. Machine-readable and exportable for regulatory submission.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ ARTICLE MAPPING ═══ -->
+<div id="pg-mapping" class="page">
+  <div class="hero">
+    <div class="eye">Article mapping</div>
+    <div class="hh">DORA — article by article</div>
+    <div class="hs">A precise mapping of each relevant DORA article to SplitSecure's architecture, the specific mechanism that satisfies the requirement, and the evidence produced.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">ICT risk management, resilience, and third-party controls</div>
+    <table class="map-table">
+      <thead>
+        <tr>
+          <th>Article</th>
+          <th>Requirement</th>
+          <th class="ss">SplitSecure mechanism</th>
+          <th>Evidence produced</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="sec-col">Art. 9</td>
+          <td class="req-col">Separation of duties — no single user holds excessive permissions over critical ICT systems</td>
+          <td class="ss-col">k-of-n threshold quorum makes unilateral administrative action mathematically impossible. Every privileged action requires independent approval from multiple physical devices.</td>
+          <td class="meth-col">Quorum configuration report confirming no single-approver actions; multi-device approval records per action</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 15</td>
+          <td class="req-col">ICT risk minimization — limit the impact of ICT risk through technical controls</td>
+          <td class="ss-col">No persistent plaintext keys exist on disk. Secrets are split using Shamir Secret Sharing, reconstructed ephemerally inside attested runtimes for one operation, then immediately discarded. The "last secret" liability is eliminated.</td>
+          <td class="meth-col">Architectural attestation confirming no persistent credential; ephemeral reconstruction audit records</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 7</td>
+          <td class="req-col">ICT tool and system integrity — prove tools have not been tampered with</td>
+          <td class="ss-col">Hardware attestation (Apple App Attest and AWS Nitro Enclaves) on every protocol message confirms the authorization request originated from a legitimate, unmodified runtime. An OS-level or operator-level compromise cannot produce a valid attestation.</td>
+          <td class="meth-col">Hardware attestation certificate per action; runtime integrity log</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 28</td>
+          <td class="req-col">Third-party non-delegable responsibility — financial entities remain accountable for ICT risk regardless of outsourcing</td>
+          <td class="ss-col">Vendors initiate proposals. The financial entity's own team provides quorum approval on their own attested devices. The vendor never holds a complete credential and cannot act on the entity's systems without internal authorization.</td>
+          <td class="meth-col">Third-party access report isolating vendor-originated events with quorum approval records</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 29</td>
+          <td class="req-col">Key contractual provisions — contracts with ICT third-party providers must include access control obligations</td>
+          <td class="ss-col">SplitSecure's architecture eliminates the need to rely on contractual access control commitments — the control is technically enforced independent of vendor behaviour. Cryptographic sovereignty is architectural, not contractual.</td>
+          <td class="meth-col">Architectural attestation confirming protocol-level enforcement supersedes contractual reliance</td>
+          <td><span class="badge ok-bg">Exceeds</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 30</td>
+          <td class="req-col">Preliminary assessment of ICT concentration risk — identify and monitor dependencies on critical third-party providers</td>
+          <td class="ss-col">Every vendor access event is flagged in the audit trail with the vendor identity, action type, systems accessed, and quorum approval. Concentration analysis is available as a filtered report across any time window.</td>
+          <td class="meth-col">Third-party concentration report; vendor dependency audit log exportable by provider</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 18</td>
+          <td class="req-col">ICT-related incident classification — maintain records sufficient to reconstruct incidents for reporting to authorities</td>
+          <td class="ss-col">Every proposal, vote, and execution result is recorded as a cryptographic audit observation — SHA3-512 hashed and signed by a rotating signer. Any attempt to alter records is mathematically detectable. Exportable in machine-readable format for regulatory submission.</td>
+          <td class="meth-col">SHA3-512 hashed tamper-evident audit trail; machine-readable incident export; forensic reconstruction report</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 17</td>
+          <td class="req-col">ICT-related incident management — detect, manage, notify, and report ICT incidents</td>
+          <td class="ss-col">Continuous monitoring of all privileged actions at the protocol level. Anomalous patterns — unauthorized access attempts, quorum failures, unusual vendor activity — are captured in real time and exportable for incident response teams.</td>
+          <td class="meth-col">Real-time anomaly detection log; quorum failure records; incident response export</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ SEPARATION OF DUTIES ═══ -->
+<div id="pg-separation" class="page">
+  <div class="hero">
+    <div class="eye">Article 9 — separation of duties</div>
+    <div class="hh">Enforcing separation of duties at the protocol layer</div>
+    <div class="hs">DORA emphasizes that no single user should have excessive permissions that could lead to unauthorized changes to critical systems. Traditional role-based access control fails when an account is hijacked or an insider goes rogue. SplitSecure enforces cryptographic separation of duties — not procedural.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">The problem with over-privileged users</div>
+    <div class="callout">
+      <div class="callout-eye">DORA Article 9 — ICT security policies</div>
+      <div class="callout-title">Traditional RBAC fails when an account is hijacked or an insider goes rogue. The permission exists. The protection is behavioral, not architectural.</div>
+      <div class="callout-body">Role-based access control assigns permissions based on job function. It documents what users should be able to do and under what conditions. It does not prevent a compromised account from exercising those permissions, an insider from abusing legitimate access, or a help desk operator from resetting controls that other controls depend on. DORA's resilience standard requires that no single failure — human or technical — can disrupt critical services. That standard cannot be satisfied by RBAC alone.</div>
+    </div>
+    <div class="g2">
+      <div class="surf" style="background:#FAECE7">
+        <div class="st">What RBAC cannot prevent</div>
+        <div class="sd" style="color:#712B13">A compromised account exercising its legitimate permissions. An insider with the correct role taking a destructive action. A help desk operator resetting MFA on a privileged account without independent authorization. A single admin rotating production keys without a second approver. Any of these produces a DORA resilience failure.</div>
+        <div style="margin-top:8px"><span class="badge fail-bg">Behaviorally dependent</span></div>
+      </div>
+      <div class="surf">
+        <div class="st">What threshold cryptography enforces</div>
+        <div class="sd">A compromised account cannot act alone — it is one vote in a quorum that still requires independent authorization from separate attested devices. An insider with legitimate access cannot execute a privileged action without a second independent approval. The separation of duties is enforced at the protocol layer, not documented in a policy.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Architecturally enforced</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">How the propose-vote-execute model works</div>
+    <div class="step-flow">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Propose</div>
+          <div class="step-desc">An administrator initiates a privileged action — for example, rotating database keys, modifying firewall rules, or granting vendor access. The proposal is context-aware: it specifies who is requesting, what system is targeted, what action is requested, and for how long. The action is locked until the quorum threshold is met.</div>
+          <span class="step-badge">Action-level resolution — not just login</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Vote</div>
+          <div class="step-desc">A minimum threshold of independent approvers review the proposal on their own hardware-attested devices. Each vote is a cryptographic signature bound to the device identity and the specific proposal. No approver can vote on behalf of another. A hardware-level compromise of one device is insufficient to meet the quorum.</div>
+          <span class="step-badge">Hardware-attested — replay-proof</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Execute</div>
+          <div class="step-desc">Once the quorum threshold is met, the secret is reconstructed ephemerally inside an attested runtime for that single operation, then immediately discarded. The execution event is recorded as a tamper-evident cryptographic observation. No persistent credential is ever produced.</div>
+          <span class="step-badge">Ephemeral reconstruction — discarded immediately</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">What the quorum model protects against</div>
+    <div class="g2">
+      <div class="surf"><div class="st">Insider threat</div><div class="sd">A rogue insider with legitimate credentials cannot execute a privileged action alone. Their approval is one vote in a threshold. The action does not execute without independent authorization from separate devices controlled by separate individuals.</div></div>
+      <div class="surf"><div class="st">Compromised account</div><div class="sd">A stolen or phished account credential cannot authorize unilateral action. The account is one approver in a quorum. Even if the attacker has full control of that account, the action requires additional independent approvals from hardware-attested devices they do not control.</div></div>
+      <div class="surf"><div class="st">Social engineering</div><div class="sd">An attacker who tricks an administrator into approving a malicious request — through deepfake impersonation, MFA fatigue, or help desk manipulation — gains one vote in a quorum that still requires independent authorization from devices the attacker has not compromised.</div></div>
+      <div class="surf"><div class="st">Single admin availability risk</div><div class="sd">The quorum model also protects against unavailability. If one approver is unreachable, the threshold can be met by the remaining quorum members — without relying on a single administrator whose absence blocks critical operations.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TPRM ═══ -->
+<div id="pg-tprm" class="page">
+  <div class="hero">
+    <div class="eye">Articles 28–30 — ICT third-party risk</div>
+    <div class="hh">Accountability cannot be delegated</div>
+    <div class="hs">Under DORA, financial entities remain fully accountable for their ICT risk even when services are outsourced to critical third-party providers. SplitSecure gives financial entities cryptographic sovereignty over their own systems — no vendor holds a complete credential, and no vendor can act without internal authorization.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">The third-party access problem</div>
+    <div class="callout">
+      <div class="callout-eye">DORA Articles 28–30 — ICT third-party risk management</div>
+      <div class="callout-title">Handing a static service account or long-lived API key to a managed service provider is a DORA compliance violation if they can act unilaterally on your systems.</div>
+      <div class="callout-body">Traditional MSP arrangements grant vendors standing access to customer systems through service accounts, API keys, or PAM credentials managed on the vendor's infrastructure. Under DORA, the financial entity remains fully accountable for ICT risk regardless of contractual terms. A vendor that holds complete credentials and can act unilaterally is a single point of failure — one breach of the MSP simultaneously exposes every customer's systems. SplitSecure eliminates this by ensuring vendors never hold a complete credential and cannot act without a live internal quorum from the financial entity's own devices.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">How SplitSecure secures the supply chain</div>
+    <div class="step-flow">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Vendor initiates a proposal</div>
+          <div class="step-desc">The MSP or third-party provider submits a context-aware proposal specifying the system, the action, and the time window required. The proposal is visible to the financial entity's approval team before any access is granted. Nothing executes until the quorum is met.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Internal team reviews and approves</div>
+          <div class="step-desc">The financial entity's own team reviews the proposal on their hardware-attested devices. Each approval is cryptographically signed and bound to the approver's device identity. The vendor's proposal cannot be self-approved — the quorum must include internal parties.</div>
+          <span class="step-badge">Cryptographic sovereignty — internal approval required</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Ephemeral access — scoped, time-limited, context-aware</div>
+          <div class="step-desc">Once the quorum is met, the secret is reconstructed ephemerally for that single operation and immediately discarded. The vendor never "holds" the key. Access is scoped to the specific system and action requested. The complete audit record is generated as a byproduct of the execution.</div>
+          <span class="step-badge">No standing vendor credentials — ever</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">What DORA examiners can verify</div>
+    <div class="g2">
+      <div class="surf"><div class="st">No vendor holds a complete credential</div><div class="sd">Architectural attestation confirms SplitSecure's infrastructure cannot reconstruct keys or act on customer systems. The vendor supply chain dependency — the single point of failure DORA is designed to eliminate — is architecturally removed.</div><div style="margin-top:6px"><span class="badge ok-bg">Art. 28 — Verified</span></div></div>
+      <div class="surf"><div class="st">Every vendor action required internal authorization</div><div class="sd">Third-party access report shows every vendor-originated event with the internal quorum approval that authorized it. No vendor action appears in the audit trail without a corresponding internal approval from the financial entity's own attested devices.</div><div style="margin-top:6px"><span class="badge ok-bg">Art. 30 — Verified</span></div></div>
+      <div class="surf"><div class="st">Access was scoped and time-limited</div><div class="sd">Every vendor proposal specifies scope, target system, and duration. The audit record confirms execution was bounded to the approved parameters. No standing vendor access persists beyond the authorized window.</div><div style="margin-top:6px"><span class="badge ok-bg">Art. 29 — Verified</span></div></div>
+      <div class="surf"><div class="st">Concentration risk is identifiable and auditable</div><div class="sd">Vendor access is filterable by provider across any time window. Dependency concentration across critical systems is visible in the third-party access report — enabling the concentration risk assessment DORA Article 30 requires.</div><div style="margin-top:6px"><span class="badge ok-bg">Art. 30 — Verified</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EVIDENCE ═══ -->
+<div id="pg-evidence" class="page">
+  <div class="hero">
+    <div class="eye">Article 18 — audit and forensic evidence</div>
+    <div class="hh">Self-auditing protocols — tamper-evident by construction</div>
+    <div class="hs">DORA requires systems to monitor, manage, and log ICT-related incidents to evaluate attacks and report to authorities. Traditional logs are often the first thing an attacker deletes. SplitSecure's audit trail is a byproduct of the access mechanism itself — not a separate log that can be removed.</div>
+    <div class="btns">
+      <button class="bp" onclick="sw(document.querySelectorAll('.tab')[5],'checklist')">Generate readiness report ↗</button>
+      <button class="bs">Download sample export</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">What the audit record contains</div>
+    <div class="terminal">
+      <div class="term-hdr">
+        <div class="td-dot" style="background:#ff5f57"></div>
+        <div class="td-dot" style="background:#ffbd2e"></div>
+        <div class="td-dot" style="background:#28c840"></div>
+        <span class="term-lbl">splitsecure_dora_audit_observation.json — Art. 18 forensic reconstruction record</span>
+      </div>
+      <div class="term-body">
+        <div>{</div>
+        <div class="i1"><span class="tk">"observation_id"</span>: <span class="ts">"obs_01HXKP9M2N4Q8R7T6V3W"</span>,</div>
+        <div class="i1"><span class="tk">"timestamp"</span>: <span class="ts">"2026-04-14T09:23:41.882Z"</span>,</div>
+        <div class="i1"><span class="tk">"dora_articles_satisfied"</span>: [<span class="ts">"Art.7"</span>, <span class="ts">"Art.9"</span>, <span class="ts">"Art.15"</span>, <span class="ts">"Art.18"</span>, <span class="ts">"Art.28"</span>],</div>
+        <div class="i1"><span class="tk">"action_type"</span>: <span class="ts">"privileged_credential_use"</span>,</div>
+        <div class="i1"><span class="tk">"initiating_identity"</span>: <span class="ts">"user:admin@financial-entity.eu"</span>,</div>
+        <div class="i1"><span class="tk">"vendor_action"</span>: <span class="tv">false</span>, <span class="tc">// Art.28 — flag for third-party access events</span></div>
+        <div class="i1"><span class="tk">"quorum_required"</span>: <span class="tv">3</span>, <span class="tc">// Art.9 — separation of duties enforced</span></div>
+        <div class="i1"><span class="tk">"quorum_achieved"</span>: <span class="tv">3</span>,</div>
+        <div class="i1"><span class="tk">"approvals"</span>: [</div>
+        <div class="i2">{ <span class="tk">"device_id"</span>: <span class="ts">"yubikey-A9F2"</span>, <span class="tk">"hw_attested"</span>: <span class="tv">true</span>, <span class="tk">"sig"</span>: <span class="ts">"3045022100..."</span> },</div>
+        <div class="i2">{ <span class="tk">"device_id"</span>: <span class="ts">"nitro-enclave-C7"</span>, <span class="tk">"hw_attested"</span>: <span class="tv">true</span>, <span class="tk">"sig"</span>: <span class="ts">"3044022079..."</span> },</div>
+        <div class="i2">{ <span class="tk">"device_id"</span>: <span class="ts">"mobile-F7B4"</span>, <span class="tk">"hw_attested"</span>: <span class="tv">true</span>, <span class="tk">"sig"</span>: <span class="ts">"30450221..."</span> }</div>
+        <div class="i1">],</div>
+        <div class="i1"><span class="tk">"credential_stored"</span>: <span class="tv">false</span>, <span class="tc">// Art.15 — no persistent plaintext key</span></div>
+        <div class="i1"><span class="tk">"secret_ephemeral"</span>: <span class="tv">true</span>, <span class="tc">// reconstructed for one operation, discarded immediately</span></div>
+        <div class="i1"><span class="tk">"runtime_integrity"</span>: <span class="ts">"attested"</span>, <span class="tc">// Art.7 — unmodified runtime confirmed</span></div>
+        <div class="i1"><span class="tk">"observation_hash"</span>: <span class="ts">"sha3-512:a4f8c2..."</span>, <span class="tc">// Art.18 — tamper-evident</span></div>
+        <div class="i1"><span class="tk">"tamper_evident"</span>: <span class="tv">true</span></div>
+        <div>}</div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="surf"><div class="st">Why this satisfies Art. 18</div><div class="sd">The record is produced by the access mechanism itself — not a separate logging layer. An attacker with admin rights cannot alter it without invalidating the SHA3-512 hash. It contains sufficient information to forensically reconstruct any privileged action for regulatory submission.</div></div>
+      <div class="surf"><div class="st">What cannot be fabricated</div><div class="sd">Each device signature is independently verifiable using the device's public key. The observation hash chains to the previous record. A record cannot be inserted or removed from the sequence without breaking the chain — mathematically detectable by DORA examiners.</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Evidence types for DORA examination</div>
+    <div class="prow">
+      <div class="pnum">01</div>
+      <div>
+        <div class="pt">Immutable audit trail — Art. 18</div>
+        <div class="pd">SHA3-512 hashed observations of every proposal, vote, and execution result. Signed by a rotating signer. Any alteration is mathematically detectable. Exportable in JSON or CSV format for DORA incident reporting and regulatory submission.</div>
+        <div class="pev">Export format: JSON, CSV, SIEM-compatible</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">02</div>
+      <div>
+        <div class="pt">Quorum integrity report — Art. 9</div>
+        <div class="pd">Verifies that k-of-n thresholds were active during all critical maintenance windows. Documents the quorum configuration, enrolled devices, and authorized parties. Confirms no single-approver actions occurred during the period.</div>
+        <div class="pev">Export format: PDF, JSON</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">03</div>
+      <div>
+        <div class="pt">Third-party oversight export — Art. 28–30</div>
+        <div class="pd">Specifically documents how vendor access was gated by internal approvals. Filterable by vendor, system, and time window. Confirms no vendor held standing access or acted without a live internal quorum.</div>
+        <div class="pev">Export format: PDF, CSV</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">04</div>
+      <div>
+        <div class="pt">Hardware attestation proof — Art. 7</div>
+        <div class="pd">Confirms that all administrative actions originated from unmodified, legitimate device runtimes. Each observation includes the hardware attestation certificate for the approving device. Deepfake and OS-level tampering are architecturally detectable.</div>
+        <div class="pev">Attestation certificate per action · Apple App Attest and AWS Nitro supported</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">05</div>
+      <div>
+        <div class="pt">Single point of failure analysis — Art. 9 and Art. 15</div>
+        <div class="pd">Architectural proof that no single device compromise can disrupt critical services. Documents the quorum configuration across all protected systems and confirms that the loss of any single device is insufficient to either execute or block a privileged action.</div>
+        <div class="pev">Architectural attestation · Audited by Tetrel Security</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CHECKLIST ═══ -->
+<div id="pg-checklist" class="page">
+  <div class="hero">
+    <div class="eye">DORA readiness</div>
+    <div class="hh">Generate your DORA resilience report</div>
+    <div class="hs">Generate an examiner-ready report documenting SplitSecure's satisfaction of DORA's ICT resilience, separation of duties, third-party risk, and incident reporting requirements.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">DORA resilience checklist — SplitSecure coverage</div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Single point of failure analysis — Art. 9 and Art. 15</div>
+        <div class="ci-desc">Architectural proof that no single device compromise can disrupt critical ICT services. No single administrator, vendor, or device holds sufficient authority to act alone or to take critical systems offline.</div>
+        <div class="ci-ev">Evidence: quorum configuration report, architectural attestation</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Quorum integrity during critical maintenance windows — Art. 9</div>
+        <div class="ci-desc">Verification that k-of-n thresholds were active and enforced during all privileged actions in the assessment period. Confirms separation of duties was architecturally enforced, not procedurally documented.</div>
+        <div class="ci-ev">Evidence: quorum integrity report, multi-device approval records</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Third-party oversight — internal approvals gated all vendor access — Art. 28–30</div>
+        <div class="ci-desc">Specifically documents how vendor access was gated by internal approvals. Confirms no vendor held standing credentials, no vendor acted without internal authorization, and all vendor access was scoped, time-limited, and recorded.</div>
+        <div class="ci-ev">Evidence: third-party oversight export, vendor access log</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Hardware attestation — all actions originated from unmodified runtimes — Art. 7</div>
+        <div class="ci-desc">Hardware attestation certificates for all administrative actions confirm that authorization requests originated from legitimate, unmodified device runtimes. OS-level and operator-level tampering is architecturally detectable.</div>
+        <div class="ci-ev">Evidence: hardware attestation proof, runtime integrity log</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Forensic reconstructibility for incident reporting — Art. 18</div>
+        <div class="ci-desc">Tamper-evident SHA3-512 hashed audit trail sufficient to reconstruct any privileged action for regulatory submission. Machine-readable and exportable for rapid incident response and annual certification.</div>
+        <div class="ci-ev">Evidence: immutable audit trail, SIEM export, forensic reconstruction report</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">No persistent plaintext keys — last secret liability eliminated — Art. 15</div>
+        <div class="ci-desc">Architectural proof that no persistent plaintext credentials exist on disk. Shamir Secret Sharing distributes credential fragments across independent devices. Ephemeral reconstruction inside attested runtimes eliminates the last secret liability.</div>
+        <div class="ci-ev">Evidence: architectural attestation, Shamir shard distribution record</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Generate your report</div>
+    <div class="g2" style="margin-bottom:12px">
+      <div class="surf">
+        <div class="st" style="margin-bottom:10px">Articles to include</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 7 — ICT tool and system integrity</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 9 — Separation of duties</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 15 — ICT risk minimization</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 18 — Incident reporting</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 28–30 — Third-party risk</label>
+        </div>
+      </div>
+      <div class="surf">
+        <div class="st" style="margin-bottom:10px">Report options</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div>
+            <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Date range</div>
+            <div style="display:flex;gap:8px">
+              <input type="date" style="flex:1;padding:6px 10px;font-size:12px;border:0.5px solid #e0e0e0;border-radius:6px;font-family:inherit">
+              <input type="date" style="flex:1;padding:6px 10px;font-size:12px;border:0.5px solid #e0e0e0;border-radius:6px;font-family:inherit">
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Export format</div>
+            <div style="display:flex;gap:6px">
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="radio" name="fmt" checked style="accent-color:#534AB7"> PDF</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="radio" name="fmt" style="accent-color:#534AB7"> JSON</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="radio" name="fmt" style="accent-color:#534AB7"> CSV</label>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Include</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Architectural attestation</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Article-by-article compliance mapping</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" style="accent-color:#534AB7"> Third-party access events only</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="bp">Generate DORA resilience report ↗</button>
+      <button class="bs">Preview sample report</button>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="ft">Need help preparing for a DORA examination?</div>
+  <div class="fd">Our compliance team works with EU financial entities to prepare examiner-ready DORA evidence packages, conduct SPoF analyses, and document SplitSecure's architectural satisfaction of ICT resilience requirements.</div>
+  <div class="foot-btns">
+    <button class="foot-btn-p">Get in touch ↗</button>
+    <button class="foot-btn-s">Download full DORA brief</button>
+  </div>
+</div>
+
+<script>
+function sw(tab, id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  if (typeof tab === 'object' && tab.classList) tab.classList.add('on');
+  document.getElementById('pg-' + id).classList.add('on');
+}
+document.querySelectorAll('.tab').forEach((tab, i) => {
+  const ids = ['overview','mapping','separation','tprm','evidence','checklist'];
+  tab.onclick = function() { sw(this, ids[i]); };
+});
+</script>
+</body>
+</html>

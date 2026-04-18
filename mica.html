@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SplitSecure — MiCA Compliance</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{background:#fff;color:#111}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:0.5px solid #e0e0e0;background:#fff}
+.logo{font-size:15px;font-weight:500;color:#111}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:#888}
+.bc a{color:#534AB7;text-decoration:none;cursor:pointer}
+.bc a:hover{text-decoration:underline}
+.nav-cta{font-size:13px;color:#fff;background:#534AB7;padding:7px 16px;border-radius:8px;cursor:pointer;border:none}
+.nav-cta:hover{background:#3C3489}
+.tabs{display:flex;border-bottom:0.5px solid #e0e0e0;padding:0 24px;background:#f9f9f7;overflow-x:auto}
+.tab{font-size:12px;color:#888;padding:9px 16px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.tab.on{color:#534AB7;border-bottom-color:#534AB7;font-weight:500}
+.tab:hover:not(.on){color:#111}
+.page{display:none}.page.on{display:block}
+.vid-section{display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #e0e0e0;min-height:320px}
+.vid-left{background:#1a1630;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:320px}
+.vid-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.vid-avatar{width:100px;height:100px;border-radius:50%;background:#2d2550;border:2px solid #534AB7;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:500;color:#EEEDFE}
+.vid-name{font-size:14px;font-weight:500;color:#EEEDFE}
+.vid-role{font-size:12px;color:#AFA9EC;text-align:center;max-width:180px;line-height:1.4}
+.play-ring{width:48px;height:48px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;margin-top:6px}
+.play-ring:hover{background:#3C3489}
+.vid-label{font-size:12px;color:#7F77DD;margin-top:2px}
+.vid-right{background:#f9f9f7;padding:22px 26px;display:flex;flex-direction:column;justify-content:center}
+.vid-right-head{font-size:11px;font-weight:500;color:#534AB7;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.chapter{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid #e0e0e0;cursor:pointer}
+.chapter:last-child{border-bottom:none}
+.chapter:hover .ch-t{color:#534AB7}
+.ch-time{font-size:11px;color:#534AB7;font-weight:500;min-width:34px;padding-top:1px;font-family:monospace}
+.ch-body{flex:1}
+.ch-t{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.ch-d{font-size:11px;color:#888;line-height:1.5}
+.ch-aud{font-size:10px;padding:2px 6px;border-radius:4px;background:#EEEDFE;color:#3C3489;display:inline-block;margin-top:2px}
+.hero{padding:22px 24px 16px;border-bottom:0.5px solid #e0e0e0}
+.eye{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;margin-bottom:6px}
+.hh{font-size:18px;font-weight:500;line-height:1.3;max-width:580px;margin-bottom:6px;color:#111}
+.hs{font-size:13px;color:#666;line-height:1.6;max-width:520px;margin-bottom:12px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.bp{font-size:13px;background:#534AB7;color:#EEEDFE;padding:7px 16px;border-radius:8px;cursor:pointer;border:none;font-family:inherit}
+.bp:hover{background:#3C3489}
+.bs{font-size:13px;color:#111;border:0.5px solid #ccc;padding:7px 16px;border-radius:8px;cursor:pointer;background:none;font-family:inherit}
+.bs:hover{background:#f9f9f7}
+.sec{padding:20px 24px;border-bottom:0.5px solid #e0e0e0}
+.slbl{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#aaa;margin-bottom:12px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.metric{background:#f9f9f7;border-radius:8px;padding:14px;text-align:center}
+.m-val{font-size:20px;font-weight:500;color:#534AB7}
+.m-lbl{font-size:12px;color:#666;margin-top:3px;line-height:1.4}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.ok-bg{background:#E1F5EE;color:#085041}
+.warn-bg{background:#FAEEDA;color:#633806}
+.na-bg{background:#EEEDFE;color:#3C3489}
+.fail-bg{background:#FAECE7;color:#712B13}
+.surf{background:#f9f9f7;border-radius:10px;padding:14px 16px}
+.st{font-size:13px;font-weight:500;color:#111;margin-bottom:4px}
+.sd{font-size:12px;color:#666;line-height:1.5;margin-bottom:5px}
+.sa{font-size:12px;color:#534AB7;cursor:pointer}
+.req-row{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:0.5px solid #e0e0e0}
+.req-row:last-child{border-bottom:none}
+.req-section{font-size:11px;font-weight:600;color:#534AB7;min-width:80px;padding-top:1px;font-family:monospace}
+.req-body{flex:1}
+.req-title{font-size:13px;font-weight:500;color:#111;margin-bottom:3px}
+.req-desc{font-size:12px;color:#666;line-height:1.55}
+.req-status{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;min-width:90px}
+.map-table{width:100%;border-collapse:collapse}
+.map-table th{padding:9px 12px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#aaa;text-align:left;border-bottom:0.5px solid #e0e0e0}
+.map-table th.ss{color:#534AB7}
+.map-table td{padding:12px;font-size:12px;line-height:1.5;border-bottom:0.5px solid #e0e0e0;vertical-align:top}
+.map-table td.sec-col{font-size:11px;font-weight:600;color:#534AB7;font-family:monospace;width:100px}
+.map-table td.req-col{color:#111;width:200px}
+.map-table td.ss-col{color:#111}
+.map-table td.meth-col{color:#666}
+.map-table tr:last-child td{border-bottom:none}
+.map-table tr:hover td{background:#f9f9f7}
+.terminal{background:#0d1117;border-radius:10px;overflow:hidden;margin-bottom:12px}
+.term-hdr{display:flex;align-items:center;gap:6px;padding:9px 14px;background:#161b22;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.td-dot{width:9px;height:9px;border-radius:50%}
+.term-lbl{font-size:11px;color:rgba(255,255,255,0.25);margin-left:8px;font-family:monospace}
+.term-body{padding:14px 16px;font-family:'Courier New',monospace;font-size:11px;line-height:1.8;color:rgba(255,255,255,0.65)}
+.tk{color:#79c0ff}.ts{color:#a5d6ff}.tv{color:#56d364}.tc{color:rgba(255,255,255,0.25)}
+.i1{padding-left:14px}.i2{padding-left:28px}
+.prow{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid #e0e0e0}
+.prow:last-child{border-bottom:none}
+.pnum{font-size:16px;font-weight:500;color:#534AB7;min-width:24px}
+.pt{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.pd{font-size:12px;color:#666;line-height:1.5}
+.pev{font-size:11px;color:#aaa;margin-top:2px;font-style:italic}
+.callout{background:#1a1630;border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.callout-eye{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:5px}
+.callout-title{font-size:15px;font-weight:500;color:#fff;margin-bottom:6px;line-height:1.3}
+.callout-body{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7}
+.step-flow{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:14px;padding:13px 0;border-bottom:0.5px solid #e0e0e0;align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step-num{width:28px;height:28px;border-radius:50%;background:#534AB7;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-title{font-size:13px;font-weight:500;color:#111;margin-bottom:3px}
+.step-desc{font-size:12px;color:#666;line-height:1.55}
+.step-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;background:#EEEDFE;color:#3C3489;border-radius:3px;margin-top:4px}
+.checklist-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid #e0e0e0}
+.checklist-item:last-child{border-bottom:none}
+.ci-check{width:18px;height:18px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:10px;color:#085041}
+.ci-title{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.ci-desc{font-size:12px;color:#666;line-height:1.5}
+.ci-ev{font-size:11px;color:#aaa;margin-top:2px;font-style:italic}
+.dora-link{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#EEEDFE;border-radius:8px;margin-top:12px;cursor:pointer}
+.dora-link:hover{background:#e0dffe}
+.dora-link-text{font-size:12px;color:#3C3489;flex:1;line-height:1.4}
+.dora-link-arrow{font-size:12px;color:#534AB7}
+.foot{padding:20px 24px;background:#EEEDFE}
+.ft{font-size:14px;font-weight:500;color:#26215C;margin-bottom:4px}
+.fd{font-size:12px;color:#3C3489;margin-bottom:12px;line-height:1.5}
+.foot-btns{display:flex;gap:8px}
+.foot-btn-p{font-size:13px;background:#534AB7;color:#EEEDFE;padding:8px 18px;border-radius:8px;cursor:pointer;border:none;font-family:inherit}
+.foot-btn-p:hover{background:#3C3489}
+.foot-btn-s{font-size:13px;color:#534AB7;border:0.5px solid #534AB7;padding:8px 18px;border-radius:8px;cursor:pointer;background:none;font-family:inherit}
+.foot-btn-s:hover{background:rgba(83,74,183,0.05)}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div style="display:flex;align-items:center;gap:16px">
+    <span class="logo">SplitSecure</span>
+    <div class="bc">
+      <a href="index.html">Compliance</a>
+      <span>›</span>
+      <a href="index.html">Compliance hub</a>
+      <span>›</span>
+      <span style="color:#111">MiCA</span>
+    </div>
+  </div>
+  <button class="nav-cta">Get in touch ↗</button>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="sw(this,'overview')">Overview</button>
+  <button class="tab" onclick="sw(this,'mapping')">Article mapping</button>
+  <button class="tab" onclick="sw(this,'custody')">Means of access</button>
+  <button class="tab" onclick="sw(this,'governance')">Governance &amp; controls</button>
+  <button class="tab" onclick="sw(this,'evidence')">Audit &amp; evidence</button>
+  <button class="tab" onclick="sw(this,'checklist')">Readiness checklist</button>
+</div>
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="pg-overview" class="page on">
+
+  <div class="vid-section">
+    <div class="vid-left">
+      <div class="vid-overlay">
+        <div class="vid-avatar">TM</div>
+        <div class="vid-name">Tristan Morris</div>
+        <div class="vid-role">SplitSecure — MiCA compliance briefing</div>
+        <button class="play-ring">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><polygon points="6,3 15,9 6,15" fill="#EEEDFE"/></svg>
+        </button>
+        <div class="vid-label">4 min overview</div>
+      </div>
+    </div>
+    <div class="vid-right">
+      <div class="vid-right-head">What this briefing covers</div>
+      <div class="chapter"><div class="ch-time">0:00</div><div class="ch-body"><div class="ch-t">Who this is for</div><div class="ch-d">CASPs, digital asset custodians, and compliance officers navigating strict liability under MiCA Articles 70 and 75</div><span class="ch-aud">CASP · Custodian · Compliance</span></div></div>
+      <div class="chapter"><div class="ch-time">0:30</div><div class="ch-body"><div class="ch-t">The strict liability challenge — Articles 70 and 75</div><div class="ch-d">Why CASPs are strictly liable for loss of the "means of access" and what constitutes an unmitigated concentration risk</div><span class="ch-aud">Legal · Compliance</span></div></div>
+      <div class="chapter"><div class="ch-time">1:20</div><div class="ch-body"><div class="ch-t">Securing the means of access — threshold signing authority</div><div class="ch-d">How Shamir Secret Sharing eliminates the single path to total asset exfiltration regulators require CASPs to address</div><span class="ch-aud">CISO · Architecture</span></div></div>
+      <div class="chapter"><div class="ch-time">2:15</div><div class="ch-body"><div class="ch-t">Governance and internal controls — Article 68</div><div class="ch-d">Cryptographic separation of duties replacing policy promises — context-aware voting on physical devices</div><span class="ch-aud">Compliance · Legal</span></div></div>
+      <div class="chapter"><div class="ch-time">3:10</div><div class="ch-body"><div class="ch-t">Examiner-ready audit evidence</div><div class="ch-d">Self-auditing protocols — SHA3-512 tamper-evident observations generated by the signing mechanism itself</div><span class="ch-aud">All audiences</span></div></div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="eye">MiCA — SplitSecure Compliance Hub</div>
+    <div class="hh">Hardening the "Means of Access" Under MiCA</div>
+    <div class="hs">MiCA represents a fundamental shift in crypto-asset governance, moving from unregulated operations to a regime of strict institutional resilience. Under Articles 70 and 75, CASPs are strictly liable for the loss of crypto-assets or the means of access resulting from hacks or malfunctions. SplitSecure provides the mathematical foundation to eliminate the single points of failure that trigger this liability.</div>
+    <div class="btns">
+      <button class="bp" onclick="sw(document.querySelectorAll('.tab')[1],'mapping')">See article mapping ↗</button>
+      <button class="bs" onclick="sw(document.querySelectorAll('.tab')[4],'evidence')">How evidence is generated</button>
+      <button class="bs" onclick="sw(document.querySelectorAll('.tab')[5],'checklist')">Generate readiness report</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">The strict liability challenge</div>
+    <div class="g4">
+      <div class="metric"><div class="m-val">Art. 75</div><div class="m-lbl">Strict liability — CASPs responsible for loss of crypto-assets or means of access resulting from hacks or malfunctions</div></div>
+      <div class="metric"><div class="m-val">Art. 70</div><div class="m-lbl">Safekeeping — no single CASP server, employee, or HSM should represent a path to total asset exfiltration</div></div>
+      <div class="metric"><div class="m-val">Art. 68</div><div class="m-lbl">Internal controls — operational integrity enforced by mechanism, not management body reputation or policy promise</div></div>
+      <div class="metric"><div class="m-val">Art. 14</div><div class="m-lbl">ICT systems — security access protocols must meet Union standards; DORA requirements apply to MiCA-regulated CASPs</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">From centralized custody to distributed sovereignty</div>
+    <div class="callout">
+      <div class="callout-eye">MiCA — EU 2023/1114, Articles 70 and 75</div>
+      <div class="callout-title">If a single employee, a single server, or a single HSM represents a path to total asset exfiltration, the CASP is carrying an unmitigated concentration risk that regulators explicitly flag under strict liability.</div>
+      <div class="callout-body">Traditional crypto-asset custody relies on a single root access path — a master key, an HSM, or an admin account that holds sufficient authority to move client assets unilaterally. Under MiCA Articles 70 and 75, the CASP is strictly liable if that path is exploited through a hack or malfunction. SplitSecure replaces centralized custody with distributed sovereignty — the means of access is split into n fragments via Shamir Secret Sharing. A complete private key never exists as a static object. Reconstructing it requires a k-of-n mathematical proof across independent hardware-attested devices, engineering the malfunction or hack liability out of the architecture.</div>
+    </div>
+    <div class="g2">
+      <div class="surf" style="background:#FAECE7">
+        <div class="st">What creates strict liability exposure</div>
+        <div class="sd" style="color:#712B13">A master key or HSM that holds complete signing authority for client assets. A single admin with sufficient access to move funds unilaterally. A warm wallet provider whose compromise simultaneously exposes all client assets. Any architecture where one failure point — human or technical — produces total asset exfiltration.</div>
+        <div style="margin-top:8px"><span class="badge fail-bg">Concentration risk — Art. 75 liability</span></div>
+      </div>
+      <div class="surf">
+        <div class="st">What SplitSecure eliminates</div>
+        <div class="sd">No complete private key ever exists as a static object. Reconstruction requires a k-of-n mathematical proof across independent hardware-attested devices. No single device, employee, sub-custodian, or SplitSecure itself holds sufficient key material to move client assets. The architectural condition for Art. 75 liability is removed.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Distributed sovereignty — liability mitigated</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Key articles addressed by SplitSecure</div>
+    <div class="req-row">
+      <div class="req-section">Art. 75</div>
+      <div class="req-body"><div class="req-title">Custody policy and risks — means of access</div><div class="req-desc">Minimizes risk of loss by ensuring no persistent plaintext key exists on disk. Keys are reconstructed ephemerally inside attested runtimes for a single signing event and immediately discarded. The hack liability is architecturally mitigated.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Art. 70</div>
+      <div class="req-body"><div class="req-title">Safekeeping of client assets</div><div class="req-desc">Ensures cryptographic sovereignty — the client retains participation in the quorum, preventing the CASP from concentrating all risk in a single provider vault. No sub-custodian or cloud infrastructure can act on client assets without the client's own attested device participation.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Art. 68</div>
+      <div class="req-body"><div class="req-title">Internal controls and operational integrity</div><div class="req-desc">Enforces operational integrity by making unilateral administrative or custodial action mathematically impossible through threshold quorums. Governance is cryptographic, not procedural — it does not depend on management body reputation or policy compliance.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Art. 14</div>
+      <div class="req-body"><div class="req-title">ICT systems and security — Union standards</div><div class="req-desc">Satisfies Union standards for security access protocols through hardware-level attestation (Apple App Attest and AWS Nitro) on every protocol message. DORA ICT resilience requirements applicable to CASPs are addressed by the same architecture.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="dora-link" onclick="window.location.href='dora.html'">
+      <div class="dora-link-text"><strong style="color:#26215C">DORA linkage:</strong> MiCA requires CASPs to comply with DORA ICT risk management standards. SplitSecure satisfies both simultaneously — see the DORA compliance hub for the full article-by-article mapping.</div>
+      <span class="dora-link-arrow">See DORA hub ↗</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ ARTICLE MAPPING ═══ -->
+<div id="pg-mapping" class="page">
+  <div class="hero">
+    <div class="eye">Article mapping</div>
+    <div class="hh">MiCA — article by article</div>
+    <div class="hs">A precise mapping of each relevant MiCA article to SplitSecure's architecture, the mechanism that satisfies the requirement, and the evidence produced for EBA and ESMA examination.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Custody, governance, and ICT controls</div>
+    <table class="map-table">
+      <thead>
+        <tr>
+          <th>Article</th>
+          <th>Requirement</th>
+          <th class="ss">SplitSecure mechanism</th>
+          <th>Evidence produced</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="sec-col">Art. 75</td>
+          <td class="req-col">Strict liability for loss of crypto-assets or means of access resulting from hacks or malfunctions</td>
+          <td class="ss-col">No persistent plaintext key exists on disk. Keys reconstructed ephemerally inside attested runtimes for a single signing event and immediately discarded. No complete key exists for an attacker to steal or a malfunction to expose.</td>
+          <td class="meth-col">Architectural attestation confirming no persistent key material; ephemeral reconstruction audit records</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 70</td>
+          <td class="req-col">Safekeeping of client assets — no single provider should concentrate all custodial risk</td>
+          <td class="ss-col">Client retains participation in the quorum — SplitSecure and any sub-custodian cannot reconstruct keys without the client's own attested device approval. Cryptographic sovereignty remains with the client. No concentration of custodial risk in any single provider.</td>
+          <td class="meth-col">Quorum configuration confirming client device participation; third-party custody dependency map</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 68</td>
+          <td class="req-col">Internal controls — operational integrity and governance mechanisms</td>
+          <td class="ss-col">Unilateral administrative or custodial action is mathematically impossible. Every asset movement requires a k-of-n quorum. Authorization is expressed as a signed statement — cryptographically provable chain of authority replacing traditional ACLs.</td>
+          <td class="meth-col">Quorum integrity report; immutable delegation graph; quorum approval records per signing event</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 14</td>
+          <td class="req-col">ICT systems and security — Union-standard security access protocols</td>
+          <td class="ss-col">Hardware attestation (Apple App Attest and AWS Nitro) on every protocol message confirms the authorization request originated from a legitimate, unmodified runtime. Satisfies Union ICT security standards and DORA ICT risk management requirements applicable to CASPs.</td>
+          <td class="meth-col">Hardware attestation certificate per signing event; runtime integrity log; DORA article mapping</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 76</td>
+          <td class="req-col">Segregation of client assets — client assets must be identifiable and segregated from CASP proprietary assets</td>
+          <td class="ss-col">Each client quorum is independently configured with its own k-of-n threshold and device set. Client key material is mathematically segregated — no CASP-level credential can access client assets. Segregation is architectural, not procedural.</td>
+          <td class="meth-col">Per-client quorum configuration report; segregation attestation</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Art. 72</td>
+          <td class="req-col">Complaints handling — record-keeping sufficient to reconstruct client rights and positions</td>
+          <td class="ss-col">Every signing event produces a tamper-evident cryptographic observation — SHA3-512 hashed and signed by a rotating signer. Complete audit trail of all asset movements is available for regulatory submission and client dispute resolution.</td>
+          <td class="meth-col">SHA3-512 tamper-evident audit trail; per-client signing event log exportable for regulators</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ MEANS OF ACCESS ═══ -->
+<div id="pg-custody" class="page">
+  <div class="hero">
+    <div class="eye">Article 75 — means of access</div>
+    <div class="hh">Eliminating the single path to total asset exfiltration</div>
+    <div class="hs">Regulators, including the EBA and ESMA, require CASPs to demonstrate they are not concentrating risk with a single provider or a single internal admin. Traditional warm or cold storage often still relies on a single root access path that can be phished, socially engineered, or malfunctioned. SplitSecure enforces threshold signing authority — no nuclear master key, no single path to total loss.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">The concentration of risk problem</div>
+    <div class="callout">
+      <div class="callout-eye">MiCA Article 75 — custody policy</div>
+      <div class="callout-title">Traditional custody arrangements rely on a single "root" access path — a master key, a warm wallet, or an HSM that holds complete signing authority. Under MiCA Art. 75, that path is a strict liability risk.</div>
+      <div class="callout-body">EBA and ESMA guidance on MiCA implementation consistently flags concentration of custody risk as the primary concern. A CASP that relies on a single HSM, a single cloud key management service, or a single admin account with sufficient authority to move client assets is carrying an unmitigated Art. 75 liability — regardless of what the custody policy document says. SplitSecure eliminates this by ensuring no complete private key ever exists. Reconstructing the means of access requires a k-of-n proof across independent hardware-attested devices. The architectural condition for total asset exfiltration is removed.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">How SplitSecure secures the means of access</div>
+    <div class="step-flow">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">No nuclear master key — distributed fragments across independent devices</div>
+          <div class="step-desc">Private keys are split across a group of independent hardware-attested devices using Shamir Secret Sharing. No single device holds sufficient key material to reconstruct the means of access. The CASP, SplitSecure, sub-custodians, and cloud infrastructure each hold fragments — none holds a complete key.</div>
+          <span class="step-badge">Art. 75 — no single path to exfiltration</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Action-level gating — every transaction is a multi-party event</div>
+          <div class="step-desc">You do not just gate the login to a custodial portal — you gate the specific signing event. Every asset movement requires the team to collectively confirm that the transaction complies with the CASP's internal policy. Shareholders review exactly what they are signing — address, amount, destination — on their physical devices before casting a vote.</div>
+          <span class="step-badge">Art. 68 — context-aware voting</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Ephemeral reconstruction — means of access discarded after each use</div>
+          <div class="step-desc">Once the quorum threshold is met, the key is reconstructed ephemerally inside an attested runtime for that single signing event and immediately discarded. No persistent means of access is produced. A successful signing event leaves no recoverable key material — for an attacker or for the CASP itself.</div>
+          <span class="step-badge">Art. 75 — malfunction liability eliminated</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Client cryptographic sovereignty — client participation in quorum</div>
+          <div class="step-desc">The client retains at least one device in the quorum configuration. SplitSecure and the CASP cannot reconstruct the client's keys without the client's own attested device participating in the vote. Custody concentration risk is distributed — not simply transferred to a different provider.</div>
+          <span class="step-badge">Art. 70 — no single-provider concentration</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">What regulators can verify</div>
+    <div class="g2">
+      <div class="surf"><div class="st">No complete key exists at rest</div><div class="sd">Architectural attestation confirms no persistent plaintext key material exists on any device — CASP infrastructure, SplitSecure infrastructure, sub-custodian, or cloud provider. The means of access cannot be stolen because it does not exist as a static object.</div><div style="margin-top:6px"><span class="badge ok-bg">Art. 75 — Verified</span></div></div>
+      <div class="surf"><div class="st">Client assets are segregated architecturally</div><div class="sd">Each client has an independently configured quorum with its own device set and threshold. CASP proprietary assets and client assets are governed by separate quorum groups — segregation is mathematical, not procedural.</div><div style="margin-top:6px"><span class="badge ok-bg">Art. 76 — Verified</span></div></div>
+      <div class="surf"><div class="st">No single provider concentrates custodial risk</div><div class="sd">Quorum configuration report confirms client devices participate in every signing quorum. SplitSecure infrastructure alone cannot reconstruct a client key. Sub-custodian and cloud provider compromise cannot produce a complete means of access without client device participation.</div><div style="margin-top:6px"><span class="badge ok-bg">Art. 70 — Verified</span></div></div>
+      <div class="surf"><div class="st">Every asset movement is a verifiable multi-party event</div><div class="sd">Every signing event produces a tamper-evident cryptographic observation identifying which devices participated, what transaction was approved, and the hardware attestation proof for each approver. Regulators can reconstruct the authorization chain for any asset movement.</div><div style="margin-top:6px"><span class="badge ok-bg">Art. 72 — Verified</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GOVERNANCE ═══ -->
+<div id="pg-governance" class="page">
+  <div class="hero">
+    <div class="eye">Article 68 — governance and internal controls</div>
+    <div class="hh">Eliminating the rogue insider — cryptographic separation of duties</div>
+    <div class="hs">MiCA Article 68 demands that management bodies possess appropriate knowledge and that internal control mechanisms ensure the integrity of the CASP. SplitSecure replaces policy promises with cryptographic enforcement — governance does not depend on the repute of any individual.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Why governance-by-reputation fails</div>
+    <div class="callout">
+      <div class="callout-eye">MiCA Article 68 — internal controls</div>
+      <div class="callout-title">Regulators require CASPs to demonstrate internal control mechanisms that ensure operational integrity. A policy that says "only authorized personnel may move client assets" is not a mechanism — it is a promise.</div>
+      <div class="callout-body">MiCA's internal controls requirements reflect a broader regulatory movement away from governance based on the repute of individuals and toward governance based on technical constraint. An admin who is "highly reputable" can still scrape keys from their own device memory if the system permits it. An insider who is "trusted" can still move client assets unilaterally if no second approver is required. SplitSecure replaces these behavioral dependencies with cryptographic enforcement — operator opacity means even a legitimate admin cannot access key material from their own device memory, and threshold quorums mean no individual can execute a custodial action without multi-party authorization.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">How SplitSecure hardens governance</div>
+    <div class="g2">
+      <div class="surf">
+        <div class="st">Immutable delegation graph</div>
+        <div class="sd">Authorization is expressed as a signed statement from one identity to another — cryptographically provable chains of authority replacing traditional access control lists. Every delegation is recorded, timestamped, and unforgeable. Regulators can trace the complete authorization chain for any custodial action.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Art. 68 — Verifiable</span></div>
+      </div>
+      <div class="surf">
+        <div class="st">Context-aware voting — shareholders see what they sign</div>
+        <div class="sd">Quorum members review the exact transaction on their physical devices before casting a vote — destination address, asset amount, counterparty. There is no blind approval. The voter must confirm the specific custodial action, not just authenticate their identity.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Art. 68 — Verifiable</span></div>
+      </div>
+      <div class="surf">
+        <div class="st">Operator opacity — memory is opaque to the device operator</div>
+        <div class="sd">System memory is opaque to the device operator or OS during key reconstruction. Even a legitimate admin running the SplitSecure software on their own hardware cannot scrape key fragments from device memory. Physical device possession does not grant access to key material — the quorum threshold must be met.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Art. 14 — Verifiable</span></div>
+      </div>
+      <div class="surf">
+        <div class="st">Hardware attestation on every vote</div>
+        <div class="sd">Every vote in the quorum is cryptographically bound to the identity and code of the hardware-attested runtime that produced it. An emulated or tampered device cannot produce a valid attestation. Governance is enforced at the hardware layer — not the policy layer.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Art. 14 — Verifiable</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">The rogue insider scenario — why it fails against SplitSecure</div>
+    <div class="prow">
+      <div class="pnum">01</div>
+      <div>
+        <div class="pt">Insider with legitimate access attempts unilateral asset movement</div>
+        <div class="pd">The insider's device holds one fragment of the key. Initiating a signing proposal requires a quorum. The proposal is visible to all quorum members before any vote is cast. The asset movement does not execute without independent authorization from devices controlled by separate individuals. The attempt is logged as a proposal with no quorum achieved.</div>
+        <div class="pev">Evidence: failed quorum record; proposal log without execution</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">02</div>
+      <div>
+        <div class="pt">Insider attempts to extract key material from their own device</div>
+        <div class="pd">System memory is opaque during key reconstruction — the operator and OS cannot read key fragments during the signing process. The fragment on the device is a Shamir share, not the complete key. Possession of one fragment is mathematically insufficient to reconstruct the means of access.</div>
+        <div class="pev">Evidence: hardware attestation confirming operator-opaque runtime</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">03</div>
+      <div>
+        <div class="pt">Compromised sub-custodian or cloud provider attempts to move assets</div>
+        <div class="pd">Sub-custodian and cloud infrastructure hold key fragments — not complete keys. The client's own attested device participates in the quorum. A compromise of the sub-custodian or cloud provider is insufficient to reconstruct the means of access without client device participation. The architectural condition for Art. 75 liability does not arise.</div>
+        <div class="pev">Evidence: quorum configuration confirming client device requirement; third-party custody dependency map</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EVIDENCE ═══ -->
+<div id="pg-evidence" class="page">
+  <div class="hero">
+    <div class="eye">Audit and forensic evidence</div>
+    <div class="hh">Self-auditing protocols — every signing event is its own evidence</div>
+    <div class="hs">MiCA requires CASPs to maintain systems that detect and respond to market abuse and security events, and record-keeping that establishes client rights and positions. SplitSecure's audit system is built into the protocol itself — a transaction cannot be executed without first being recorded as a cryptographic observation.</div>
+    <div class="btns">
+      <button class="bp" onclick="sw(document.querySelectorAll('.tab')[5],'checklist')">Generate readiness report ↗</button>
+      <button class="bs">Download sample export</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">What the audit record contains</div>
+    <div class="terminal">
+      <div class="term-hdr">
+        <div class="td-dot" style="background:#ff5f57"></div>
+        <div class="td-dot" style="background:#ffbd2e"></div>
+        <div class="td-dot" style="background:#28c840"></div>
+        <span class="term-lbl">splitsecure_mica_signing_observation.json — Art. 72 compliant custodial audit record</span>
+      </div>
+      <div class="term-body">
+        <div>{</div>
+        <div class="i1"><span class="tk">"observation_id"</span>: <span class="ts">"obs_01HXKP9M2N4Q8R7T6V3W"</span>,</div>
+        <div class="i1"><span class="tk">"timestamp"</span>: <span class="ts">"2026-04-14T09:23:41.882Z"</span>,</div>
+        <div class="i1"><span class="tk">"mica_articles_satisfied"</span>: [<span class="ts">"Art.14"</span>, <span class="ts">"Art.68"</span>, <span class="ts">"Art.70"</span>, <span class="ts">"Art.72"</span>, <span class="ts">"Art.75"</span>, <span class="ts">"Art.76"</span>],</div>
+        <div class="i1"><span class="tk">"event_type"</span>: <span class="ts">"custodial_signing_event"</span>,</div>
+        <div class="i1"><span class="tk">"transaction"</span>: { <span class="tk">"asset"</span>: <span class="ts">"BTC"</span>, <span class="tk">"amount"</span>: <span class="ts">"2.5"</span>, <span class="tk">"destination"</span>: <span class="ts">"bc1q..."</span> },</div>
+        <div class="i1"><span class="tk">"client_id"</span>: <span class="ts">"client:institution-a"</span>, <span class="tc">// Art.76 — per-client segregation</span></div>
+        <div class="i1"><span class="tk">"quorum_required"</span>: <span class="tv">3</span>, <span class="tc">// Art.68 — unilateral action impossible</span></div>
+        <div class="i1"><span class="tk">"quorum_achieved"</span>: <span class="tv">3</span>,</div>
+        <div class="i1"><span class="tk">"client_device_participated"</span>: <span class="tv">true</span>, <span class="tc">// Art.70 — cryptographic sovereignty retained</span></div>
+        <div class="i1"><span class="tk">"approvals"</span>: [</div>
+        <div class="i2">{ <span class="tk">"device_id"</span>: <span class="ts">"client-yubikey-A9F2"</span>, <span class="tk">"hw_attested"</span>: <span class="tv">true</span>, <span class="tk">"sig"</span>: <span class="ts">"3045022100..."</span> },</div>
+        <div class="i2">{ <span class="tk">"device_id"</span>: <span class="ts">"casp-nitro-C7"</span>, <span class="tk">"hw_attested"</span>: <span class="tv">true</span>, <span class="tk">"sig"</span>: <span class="ts">"3044022079..."</span> },</div>
+        <div class="i2">{ <span class="tk">"device_id"</span>: <span class="ts">"casp-mobile-F7B4"</span>, <span class="tk">"hw_attested"</span>: <span class="tv">true</span>, <span class="tk">"sig"</span>: <span class="ts">"30450221..."</span> }</div>
+        <div class="i1">],</div>
+        <div class="i1"><span class="tk">"key_stored"</span>: <span class="tv">false</span>, <span class="tc">// Art.75 — no persistent means of access</span></div>
+        <div class="i1"><span class="tk">"key_ephemeral"</span>: <span class="tv">true</span>, <span class="tc">// reconstructed for one signing event, discarded immediately</span></div>
+        <div class="i1"><span class="tk">"observation_hash"</span>: <span class="ts">"sha3-512:a4f8c2..."</span>, <span class="tc">// tamper-evident</span></div>
+        <div class="i1"><span class="tk">"tamper_evident"</span>: <span class="tv">true</span></div>
+        <div>}</div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="surf"><div class="st">What regulators can verify from this record</div><div class="sd">That no persistent key existed (Art. 75). That the client's own device participated in the quorum (Art. 70). That no unilateral action was possible — quorum threshold was enforced (Art. 68). That client assets were segregated by client ID (Art. 76). That the record is tamper-evident and sufficient to reconstruct client rights (Art. 72).</div></div>
+      <div class="surf"><div class="st">Integrated protocol auditing</div><div class="sd">The audit system is built into the protocol itself. A transaction cannot be executed unless it has first been recorded as a cryptographic observation. The observation is not a log of what happened — it is a prerequisite for what happens. No signing event exists without an audit record.</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Evidence types for EBA and ESMA examination</div>
+    <div class="prow">
+      <div class="pnum">01</div>
+      <div>
+        <div class="pt">Means of access SPoF analysis — Art. 75</div>
+        <div class="pd">Architectural proof that k-of-n threshold protection is in place for all client asset keys. Confirms no single device, CASP employee, sub-custodian, or cloud provider holds sufficient key material to reconstruct the means of access unilaterally.</div>
+        <div class="pev">Evidence: architectural attestation, Shamir shard distribution record</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">02</div>
+      <div>
+        <div class="pt">Hardware attestation audit — Art. 14</div>
+        <div class="pd">Confirms all custodial actions originated from legitimate, unmodified hardware runtimes. Each observation includes the hardware attestation certificate for every approving device. Operator-opaque memory attestation confirms key material was not accessible to device operators during reconstruction.</div>
+        <div class="pev">Evidence: hardware attestation certificate per event · Apple App Attest and AWS Nitro supported</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">03</div>
+      <div>
+        <div class="pt">Third-party custody dependency map — Art. 70</div>
+        <div class="pd">Documents how the CASP maintains control over private key material when using sub-custodians or cloud infrastructure. Confirms client device participation requirement in all quorum configurations. Shows no sub-custodian or cloud provider holds sufficient fragments to act alone.</div>
+        <div class="pev">Evidence: quorum configuration per client; sub-custodian fragment distribution map</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">04</div>
+      <div>
+        <div class="pt">SHA3-512 tamper-evident signing log — Art. 72</div>
+        <div class="pd">Complete audit trail of all custodial signing events — proposal, votes, execution result, hardware attestation proofs. Exportable per client for dispute resolution and regulatory submission. Sufficient to reconstruct client rights and positions at any point in time.</div>
+        <div class="pev">Export format: JSON, CSV · Filterable by client, asset, date range</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">05</div>
+      <div>
+        <div class="pt">Cryptographic attestation — provider has zero key access — Art. 75</div>
+        <div class="pd">Technical document audited by Tetrel Security confirming SplitSecure cannot reconstruct client keys, the architecture uses Shamir Secret Sharing with SHA3-512 throughout, and no complete means of access exists on SplitSecure infrastructure at any point.</div>
+        <div class="pev">Audited by Tetrel Security · Available on request</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CHECKLIST ═══ -->
+<div id="pg-checklist" class="page">
+  <div class="hero">
+    <div class="eye">MiCA readiness</div>
+    <div class="hh">Generate your MiCA resilience report</div>
+    <div class="hs">Generate an examiner-ready report documenting SplitSecure's satisfaction of MiCA custody, governance, and ICT requirements for EBA and ESMA review.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">MiCA readiness checklist — SplitSecure coverage</div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Means of access SPoF analysis — Art. 75</div>
+        <div class="ci-desc">Architectural proof that k-of-n threshold protection is in place for all client asset keys. No single device, admin, sub-custodian, or SplitSecure itself holds sufficient key material to reconstruct the means of access. The Art. 75 liability condition is architecturally removed.</div>
+        <div class="ci-ev">Evidence: architectural attestation, Shamir shard distribution record</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Client cryptographic sovereignty — Art. 70</div>
+        <div class="ci-desc">Quorum configuration confirms client device participation in every signing quorum. SplitSecure and sub-custodians cannot reconstruct client keys without the client's own attested device. Custody concentration risk is architecturally distributed.</div>
+        <div class="ci-ev">Evidence: per-client quorum configuration; third-party custody dependency map</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Unilateral action impossible — governance enforced — Art. 68</div>
+        <div class="ci-desc">Quorum integrity report confirms no single-approver custodial actions occurred. Immutable delegation graph documents the authorization chain for every asset movement. Context-aware voting confirmed — approvers reviewed transaction specifics on physical devices.</div>
+        <div class="ci-ev">Evidence: quorum integrity report, delegation graph, context-aware approval records</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Hardware attestation for all custodial actions — Art. 14</div>
+        <div class="ci-desc">Hardware attestation certificates confirm all signing events originated from legitimate, unmodified runtimes. Operator-opaque memory attestation confirms key material was inaccessible to device operators. DORA ICT resilience requirements satisfied simultaneously.</div>
+        <div class="ci-ev">Evidence: hardware attestation proof per event; runtime integrity log</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Client asset segregation — Art. 76</div>
+        <div class="ci-desc">Per-client quorum configuration confirms client assets are architecturally segregated from CASP proprietary assets. Each client has an independently configured device set and threshold — no CASP-level credential can access client key material.</div>
+        <div class="ci-ev">Evidence: per-client quorum configuration; segregation attestation</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Record-keeping sufficient to reconstruct client rights — Art. 72</div>
+        <div class="ci-desc">SHA3-512 tamper-evident audit trail of all custodial signing events — exportable per client for dispute resolution and regulatory submission. Every observation generated before execution — a transaction cannot occur without a corresponding audit record.</div>
+        <div class="ci-ev">Evidence: per-client signing event log, SHA3-512 tamper-evident trail</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Generate your report</div>
+    <div class="g2" style="margin-bottom:12px">
+      <div class="surf">
+        <div class="st" style="margin-bottom:10px">Articles to include</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 14 — ICT systems and security</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 68 — Internal controls</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 70 — Safekeeping of assets</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 72 — Record-keeping</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 75 — Custody policy and strict liability</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Art. 76 — Segregation of client assets</label>
+        </div>
+      </div>
+      <div class="surf">
+        <div class="st" style="margin-bottom:10px">Report options</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div>
+            <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Date range</div>
+            <div style="display:flex;gap:8px">
+              <input type="date" style="flex:1;padding:6px 10px;font-size:12px;border:0.5px solid #e0e0e0;border-radius:6px;font-family:inherit">
+              <input type="date" style="flex:1;padding:6px 10px;font-size:12px;border:0.5px solid #e0e0e0;border-radius:6px;font-family:inherit">
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Export format</div>
+            <div style="display:flex;gap:6px">
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="radio" name="fmt" checked style="accent-color:#534AB7"> PDF</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="radio" name="fmt" style="accent-color:#534AB7"> JSON</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="radio" name="fmt" style="accent-color:#534AB7"> CSV</label>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Include</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Cryptographic attestation</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Article-by-article compliance mapping</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" style="accent-color:#534AB7"> Per-client signing events only</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="bp">Generate MiCA resilience report ↗</button>
+      <button class="bs">Preview sample report</button>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="ft">Need help preparing for an EBA or ESMA examination?</div>
+  <div class="fd">Our compliance team works with CASPs and digital asset custodians to prepare examiner-ready MiCA evidence packages, conduct custody SPoF analyses, and document SplitSecure's architectural satisfaction of Articles 70 and 75 strict liability requirements.</div>
+  <div class="foot-btns">
+    <button class="foot-btn-p">Get in touch ↗</button>
+    <button class="foot-btn-s">Download full MiCA brief</button>
+  </div>
+</div>
+
+<script>
+function sw(tab, id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  if (typeof tab === 'object' && tab.classList) tab.classList.add('on');
+  document.getElementById('pg-' + id).classList.add('on');
+}
+document.querySelectorAll('.tab').forEach((tab, i) => {
+  const ids = ['overview','mapping','custody','governance','evidence','checklist'];
+  tab.onclick = function() { sw(this, ids[i]); };
+});
+</script>
+</body>
+</html>

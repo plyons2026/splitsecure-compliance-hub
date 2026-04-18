@@ -195,29 +195,23 @@ body{background:#fff;color:#111}
         <div class="reg-d">Enforces Article 9 mandates for digital resilience by making unilateral admin action mathematically impossible.</div>
         <span class="reg-a">Compliance dashboard ↗</span>
       </div>
-      <div class="reg-row" onclick="sendPrompt('Show me SEC Regulation S-P compliance details')">
+      <div class="reg-row" onclick="window.location.href='sec-reg-sp.html'" style="cursor:pointer">
         <span class="reg-tag t-coral">SEC Reg S-P</span>
         <div class="reg-name">Vendor accountability</div>
         <div class="reg-d">Fulfills 2024 amendments: firms retain cryptographic sovereignty over data handled by vendors, MSPs, or custodians.</div>
         <span class="reg-a">See mapping ↗</span>
       </div>
-      <div class="reg-row" onclick="sendPrompt('Show me MAS TRM compliance details')">
-        <span class="reg-tag t-blue">MAS TRM</span>
-        <div class="reg-name">Dual control</div>
-        <div class="reg-d">Provides technical implementation for dual control of passwords and administrative key management under MAS Technology Risk Management guidelines.</div>
-        <span class="reg-a">See mapping ↗</span>
-      </div>
-      <div class="reg-row" onclick="sendPrompt('Show me PCI DSS compliance details')">
+      <div class="reg-row" onclick="window.location.href='pci-dss.html'" style="cursor:pointer">
         <span class="reg-tag t-amber">PCI DSS 4.0</span>
         <div class="reg-name">No shared IDs</div>
         <div class="reg-d">Eliminates shared admin credentials (Req 8.5) by attributing every action to unique, physical-device-bound identities.</div>
-        <span class="reg-a">See mapping ↗</span>
+        <span class="reg-a">Compliance dashboard ↗</span>
       </div>
-      <div class="reg-row" onclick="sendPrompt('Show me MiCA compliance details')">
+      <div class="reg-row" onclick="window.location.href='mica.html'" style="cursor:pointer">
         <span class="reg-tag t-blue">MiCA</span>
         <div class="reg-name">Digital asset custody</div>
         <div class="reg-d">Requires multi-party authorization for digital asset custody operations. No single party should hold complete private key authority.</div>
-        <span class="reg-a">See mapping ↗</span>
+        <span class="reg-a">Compliance dashboard ↗</span>
       </div>
     </div>
   </div>
@@ -323,29 +317,23 @@ body{background:#fff;color:#111}
         <div class="reg-d">Enforces Article 9 mandates for digital resilience by making unilateral admin action mathematically impossible. Vendor-hosted PAM creates exactly the concentration DORA is written to eliminate.</div>
         <span class="reg-a">Full dashboard ↗</span>
       </div>
-      <div class="reg-row" onclick="sendPrompt('Show me full SEC Regulation S-P compliance details')">
+      <div class="reg-row" onclick="window.location.href='sec-reg-sp.html'" style="cursor:pointer">
         <span class="reg-tag t-coral">SEC Reg S-P</span>
         <div class="reg-name">Vendor accountability</div>
         <div class="reg-d">Fulfills 2024 amendments: firms retain cryptographic sovereignty over data handled by vendors, MSPs, or custodians. No vendor can unilaterally access, modify, or destroy protected customer assets.</div>
         <span class="reg-a">See mapping ↗</span>
       </div>
-      <div class="reg-row" onclick="sendPrompt('Show me full MAS TRM compliance details')">
-        <span class="reg-tag t-blue">MAS TRM</span>
-        <div class="reg-name">Dual control</div>
-        <div class="reg-d">Provides technical implementation for dual control of passwords and administrative key management. Every action requires independent quorum approval — dual control is architecturally enforced, not procedurally documented.</div>
-        <span class="reg-a">See mapping ↗</span>
-      </div>
-      <div class="reg-row" onclick="sendPrompt('Show me full PCI DSS compliance details')">
+      <div class="reg-row" onclick="window.location.href='pci-dss.html'" style="cursor:pointer">
         <span class="reg-tag t-amber">PCI DSS 4.0</span>
         <div class="reg-name">No shared IDs</div>
         <div class="reg-d">Eliminates shared admin credentials (Req 8.5) by attributing every action to unique, physical-device-bound identities. Attribution is device-level and cryptographically unforgeable.</div>
-        <span class="reg-a">See mapping ↗</span>
+        <span class="reg-a">Full dashboard ↗</span>
       </div>
-      <div class="reg-row" onclick="sendPrompt('Show me full MiCA compliance details')">
+      <div class="reg-row" onclick="window.location.href='mica.html'" style="cursor:pointer">
         <span class="reg-tag t-blue">MiCA</span>
         <div class="reg-name">Digital asset custody</div>
         <div class="reg-d">Requires multi-party authorization controls for digital asset custody. Private keys governing digital assets must not be reconstructible by any single party, including the custody service provider.</div>
-        <span class="reg-a">See mapping ↗</span>
+        <span class="reg-a">Full dashboard ↗</span>
       </div>
       <div class="reg-row" onclick="sendPrompt('Show me full NIS2 compliance details')">
         <span class="reg-tag t-teal">NIS2</span>
@@ -490,25 +478,19 @@ body{background:#fff;color:#111}
         <div class="sd">Third-party concentration controls, vendor sovereignty attestation, operational resilience evidence for Articles 28 and 30.</div>
         <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
       </div>
-      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a SEC Regulation S-P compliance evidence report')">
+      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="window.location.href='sec-reg-sp.html'">
         <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#FAECE7;color:#712B13;display:inline-block;margin-bottom:8px">SEC Reg S-P</span>
         <div class="st">Vendor accountability</div>
         <div class="sd">Credential governance and cryptographic sovereignty evidence for SEC Regulation S-P safeguards rule compliance.</div>
         <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
       </div>
-      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a MAS TRM compliance evidence report')">
-        <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#E6F1FB;color:#0C447C;display:inline-block;margin-bottom:8px">MAS TRM</span>
-        <div class="st">Dual control</div>
-        <div class="sd">Technical implementation evidence for dual control of passwords and administrative key management under MAS Technology Risk Management guidelines.</div>
-        <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
-      </div>
-      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a PCI DSS compliance evidence report')">
+      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="window.location.href='pci-dss.html'">
         <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#FAEEDA;color:#633806;display:inline-block;margin-bottom:8px">PCI DSS 4.0</span>
         <div class="st">No shared IDs</div>
         <div class="sd">Shared credential elimination evidence for PCI DSS Requirement 8.5. Every action attributed to unique, physical-device-bound identities.</div>
         <div style="font-size:12px;color:#534AB7;margin-top:8px;cursor:pointer">Generate report ↗</div>
       </div>
-      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="sendPrompt('Generate a MiCA compliance evidence report')">
+      <div class="surf" style="cursor:pointer;border:0.5px solid #e0e0e0;background:#fff" onclick="window.location.href='mica.html'">
         <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:#E6F1FB;color:#0C447C;display:inline-block;margin-bottom:8px">MiCA</span>
         <div class="st">Digital asset custody</div>
         <div class="sd">Multi-party authorization evidence for digital asset private key custody operations under MiCA requirements.</div>

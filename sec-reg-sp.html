@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SplitSecure — SEC Reg S-P Compliance</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{background:#fff;color:#111}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:0.5px solid #e0e0e0;background:#fff}
+.logo{font-size:15px;font-weight:500;color:#111}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:#888}
+.bc a{color:#534AB7;text-decoration:none;cursor:pointer}
+.bc a:hover{text-decoration:underline}
+.nav-cta{font-size:13px;color:#fff;background:#534AB7;padding:7px 16px;border-radius:8px;cursor:pointer;border:none}
+.nav-cta:hover{background:#3C3489}
+.tabs{display:flex;border-bottom:0.5px solid #e0e0e0;padding:0 24px;background:#f9f9f7;overflow-x:auto}
+.tab{font-size:12px;color:#888;padding:9px 16px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.tab.on{color:#534AB7;border-bottom-color:#534AB7;font-weight:500}
+.tab:hover:not(.on){color:#111}
+.page{display:none}.page.on{display:block}
+.vid-section{display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #e0e0e0;min-height:320px}
+.vid-left{background:#1a1630;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:320px}
+.vid-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.vid-avatar{width:100px;height:100px;border-radius:50%;background:#2d2550;border:2px solid #534AB7;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:500;color:#EEEDFE}
+.vid-name{font-size:14px;font-weight:500;color:#EEEDFE}
+.vid-role{font-size:12px;color:#AFA9EC;text-align:center;max-width:180px;line-height:1.4}
+.play-ring{width:48px;height:48px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;margin-top:6px}
+.play-ring:hover{background:#3C3489}
+.vid-label{font-size:12px;color:#7F77DD;margin-top:2px}
+.vid-right{background:#f9f9f7;padding:22px 26px;display:flex;flex-direction:column;justify-content:center}
+.vid-right-head{font-size:11px;font-weight:500;color:#534AB7;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.chapter{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid #e0e0e0;cursor:pointer}
+.chapter:last-child{border-bottom:none}
+.chapter:hover .ch-t{color:#534AB7}
+.ch-time{font-size:11px;color:#534AB7;font-weight:500;min-width:34px;padding-top:1px;font-family:monospace}
+.ch-body{flex:1}
+.ch-t{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.ch-d{font-size:11px;color:#888;line-height:1.5}
+.ch-aud{font-size:10px;padding:2px 6px;border-radius:4px;background:#EEEDFE;color:#3C3489;display:inline-block;margin-top:2px}
+.hero{padding:22px 24px 16px;border-bottom:0.5px solid #e0e0e0}
+.eye{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;margin-bottom:6px}
+.hh{font-size:18px;font-weight:500;line-height:1.3;max-width:580px;margin-bottom:6px;color:#111}
+.hs{font-size:13px;color:#666;line-height:1.6;max-width:520px;margin-bottom:12px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.bp{font-size:13px;background:#534AB7;color:#EEEDFE;padding:7px 16px;border-radius:8px;cursor:pointer;border:none;font-family:inherit}
+.bp:hover{background:#3C3489}
+.bs{font-size:13px;color:#111;border:0.5px solid #ccc;padding:7px 16px;border-radius:8px;cursor:pointer;background:none;font-family:inherit}
+.bs:hover{background:#f9f9f7}
+.sec{padding:20px 24px;border-bottom:0.5px solid #e0e0e0}
+.slbl{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#aaa;margin-bottom:12px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.metric{background:#f9f9f7;border-radius:8px;padding:14px;text-align:center}
+.m-val{font-size:20px;font-weight:500;color:#534AB7}
+.m-lbl{font-size:12px;color:#666;margin-top:3px;line-height:1.4}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.ok-bg{background:#E1F5EE;color:#085041}
+.warn-bg{background:#FAEEDA;color:#633806}
+.na-bg{background:#EEEDFE;color:#3C3489}
+.fail-bg{background:#FAECE7;color:#712B13}
+.surf{background:#f9f9f7;border-radius:10px;padding:14px 16px}
+.st{font-size:13px;font-weight:500;color:#111;margin-bottom:4px}
+.sd{font-size:12px;color:#666;line-height:1.5;margin-bottom:5px}
+.sa{font-size:12px;color:#534AB7;cursor:pointer}
+.req-row{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:0.5px solid #e0e0e0}
+.req-row:last-child{border-bottom:none}
+.req-section{font-size:11px;font-weight:600;color:#534AB7;min-width:100px;padding-top:1px;font-family:monospace}
+.req-body{flex:1}
+.req-title{font-size:13px;font-weight:500;color:#111;margin-bottom:3px}
+.req-desc{font-size:12px;color:#666;line-height:1.55}
+.req-status{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;min-width:90px}
+.map-table{width:100%;border-collapse:collapse}
+.map-table th{padding:9px 12px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#aaa;text-align:left;border-bottom:0.5px solid #e0e0e0}
+.map-table th.ss{color:#534AB7}
+.map-table td{padding:12px;font-size:12px;line-height:1.5;border-bottom:0.5px solid #e0e0e0;vertical-align:top}
+.map-table td.sec-col{font-size:11px;font-weight:600;color:#534AB7;font-family:monospace;width:110px}
+.map-table td.req-col{color:#111;width:190px}
+.map-table td.ss-col{color:#111}
+.map-table td.meth-col{color:#666}
+.map-table tr:last-child td{border-bottom:none}
+.map-table tr:hover td{background:#f9f9f7}
+.terminal{background:#0d1117;border-radius:10px;overflow:hidden;margin-bottom:12px}
+.term-hdr{display:flex;align-items:center;gap:6px;padding:9px 14px;background:#161b22;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.td-dot{width:9px;height:9px;border-radius:50%}
+.term-lbl{font-size:11px;color:rgba(255,255,255,0.25);margin-left:8px;font-family:monospace}
+.term-body{padding:14px 16px;font-family:'Courier New',monospace;font-size:11px;line-height:1.8;color:rgba(255,255,255,0.65)}
+.tk{color:#79c0ff}.ts{color:#a5d6ff}.tv{color:#56d364}.tc{color:rgba(255,255,255,0.25)}
+.i1{padding-left:14px}.i2{padding-left:28px}
+.prow{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid #e0e0e0}
+.prow:last-child{border-bottom:none}
+.pnum{font-size:16px;font-weight:500;color:#534AB7;min-width:24px}
+.pt{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.pd{font-size:12px;color:#666;line-height:1.5}
+.pev{font-size:11px;color:#aaa;margin-top:2px;font-style:italic}
+.callout{background:#1a1630;border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.callout-eye{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:5px}
+.callout-title{font-size:15px;font-weight:500;color:#fff;margin-bottom:6px;line-height:1.3}
+.callout-body{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7}
+.step-flow{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:14px;padding:13px 0;border-bottom:0.5px solid #e0e0e0;align-items:flex-start}
+.step:last-child{border-bottom:none}
+.step-num{width:28px;height:28px;border-radius:50%;background:#534AB7;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-title{font-size:13px;font-weight:500;color:#111;margin-bottom:3px}
+.step-desc{font-size:12px;color:#666;line-height:1.55}
+.step-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;background:#EEEDFE;color:#3C3489;border-radius:3px;margin-top:4px}
+.deadline-box{display:flex;gap:8px;margin-top:14px}
+.deadline{flex:1;background:#f9f9f7;border-radius:8px;padding:12px 14px;border-left:3px solid #534AB7}
+.dl-date{font-size:13px;font-weight:500;color:#534AB7;margin-bottom:3px}
+.dl-label{font-size:12px;color:#111;margin-bottom:2px;font-weight:500}
+.dl-desc{font-size:11px;color:#666;line-height:1.4}
+.checklist-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid #e0e0e0}
+.checklist-item:last-child{border-bottom:none}
+.ci-check{width:18px;height:18px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:10px;color:#085041}
+.ci-title{font-size:13px;font-weight:500;color:#111;margin-bottom:2px}
+.ci-desc{font-size:12px;color:#666;line-height:1.5}
+.ci-ev{font-size:11px;color:#aaa;margin-top:2px;font-style:italic}
+.foot{padding:20px 24px;background:#EEEDFE}
+.ft{font-size:14px;font-weight:500;color:#26215C;margin-bottom:4px}
+.fd{font-size:12px;color:#3C3489;margin-bottom:12px;line-height:1.5}
+.foot-btns{display:flex;gap:8px}
+.foot-btn-p{font-size:13px;background:#534AB7;color:#EEEDFE;padding:8px 18px;border-radius:8px;cursor:pointer;border:none;font-family:inherit}
+.foot-btn-p:hover{background:#3C3489}
+.foot-btn-s{font-size:13px;color:#534AB7;border:0.5px solid #534AB7;padding:8px 18px;border-radius:8px;cursor:pointer;background:none;font-family:inherit}
+.foot-btn-s:hover{background:rgba(83,74,183,0.05)}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div style="display:flex;align-items:center;gap:16px">
+    <span class="logo">SplitSecure</span>
+    <div class="bc">
+      <a href="index.html">Compliance</a>
+      <span>›</span>
+      <a href="index.html">Compliance hub</a>
+      <span>›</span>
+      <span style="color:#111">SEC Reg S-P</span>
+    </div>
+  </div>
+  <button class="nav-cta">Get in touch ↗</button>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="sw(this,'overview')">Overview</button>
+  <button class="tab" onclick="sw(this,'mapping')">Requirement mapping</button>
+  <button class="tab" onclick="sw(this,'vendor')">Vendor oversight</button>
+  <button class="tab" onclick="sw(this,'incident')">Incident response</button>
+  <button class="tab" onclick="sw(this,'evidence')">Evidence suite</button>
+  <button class="tab" onclick="sw(this,'checklist')">Readiness checklist</button>
+</div>
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="pg-overview" class="page on">
+
+  <div class="vid-section">
+    <div class="vid-left">
+      <div class="vid-overlay">
+        <div class="vid-avatar">TM</div>
+        <div class="vid-name">Tristan Morris</div>
+        <div class="vid-role">SplitSecure — SEC Reg S-P compliance briefing</div>
+        <button class="play-ring">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><polygon points="6,3 15,9 6,15" fill="#EEEDFE"/></svg>
+        </button>
+        <div class="vid-label">4 min overview</div>
+      </div>
+    </div>
+    <div class="vid-right">
+      <div class="vid-right-head">What this briefing covers</div>
+      <div class="chapter"><div class="ch-time">0:00</div><div class="ch-body"><div class="ch-t">Who this is for</div><div class="ch-d">CCOs, CISOs, and compliance teams at RIAs and broker-dealers navigating the 2024 Reg S-P amendments</div><span class="ch-aud">CCO · CISO · Compliance</span></div></div>
+      <div class="chapter"><div class="ch-time">0:30</div><div class="ch-body"><div class="ch-t">What the 2024 amendments require</div><div class="ch-d">Incident response programs, 72-hour vendor notification, 5-year recordkeeping, and service provider oversight — the move from privacy policies to verifiable technical safeguards</div><span class="ch-aud">CCO · Compliance · Legal</span></div></div>
+      <div class="chapter"><div class="ch-time">1:20</div><div class="ch-body"><div class="ch-t">The vendor oversight gap</div><div class="ch-d">Why firms remain accountable for breaches originating at service providers — and how protocol-level oversight replaces notification promises</div><span class="ch-aud">CCO · CISO</span></div></div>
+      <div class="chapter"><div class="ch-time">2:20</div><div class="ch-body"><div class="ch-t">Incident response and forensic integrity</div><div class="ch-d">Why traditional logs fail the SEC's detection and assessment standard — and what cryptographic audit observations provide instead</div><span class="ch-aud">CISO · Compliance</span></div></div>
+      <div class="chapter"><div class="ch-time">3:15</div><div class="ch-body"><div class="ch-t">Compliance deadlines</div><div class="ch-d">Larger entities ($1.5B+ AUM): December 3, 2025 — Smaller entities: June 3, 2026</div><span class="ch-aud">All audiences</span></div></div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="eye">SEC Reg S-P — SplitSecure Compliance Hub</div>
+    <div class="hh">Non-Delegable Accountability: Closing the Vendor Oversight Gap</div>
+    <div class="hs">The SEC's May 2024 expansion of Regulation S-P represents a landmark shift in how covered institutions must protect customer information. The new mandates for Incident Response Programs and Service Provider Oversight move the bar from simple privacy policies to verifiable technical safeguards. SplitSecure provides the architectural foundation to satisfy these requirements — ensuring that even when you use third-party vendors, you retain cryptographic sovereignty over your customers' most sensitive data.</div>
+    <div class="btns">
+      <button class="bp" onclick="sw(document.querySelectorAll('.tab')[1],'mapping')">See requirement mapping ↗</button>
+      <button class="bs" onclick="sw(document.querySelectorAll('.tab')[4],'evidence')">How evidence is generated</button>
+      <button class="bs" onclick="sw(document.querySelectorAll('.tab')[5],'checklist')">Generate compliance report</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">What the 2024 amendments require</div>
+    <div class="g4">
+      <div class="metric"><div class="m-val">72 hrs</div><div class="m-lbl">Service providers must notify covered institutions within 72 hours of becoming aware of a breach</div></div>
+      <div class="metric"><div class="m-val">5 years</div><div class="m-lbl">Amended recordkeeping standard — all customer information access events retained for 5 years</div></div>
+      <div class="metric"><div class="m-val">Non-delegable</div><div class="m-lbl">Firms remain accountable for security, confidentiality, and integrity of customer NPI even when outsourced</div></div>
+      <div class="metric"><div class="m-val">IRP</div><div class="m-lbl">Written Incident Response Program required — must detect, assess, and respond to unauthorized access</div></div>
+    </div>
+    <div class="deadline-box">
+      <div class="deadline">
+        <div class="dl-date">December 3, 2025</div>
+        <div class="dl-label">Larger entities</div>
+        <div class="dl-desc">RIAs and broker-dealers with $1.5B+ AUM — full compliance with amended safeguards rule, service provider oversight, and incident response program requirements</div>
+      </div>
+      <div class="deadline">
+        <div class="dl-date">June 3, 2026</div>
+        <div class="dl-label">Smaller entities</div>
+        <div class="dl-desc">All other covered institutions — same requirements apply; entities subject to this deadline should be in implementation now</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">From privacy policies to verifiable technical safeguards</div>
+    <div class="callout">
+      <div class="callout-eye">SEC Reg S-P — 2024 amendments</div>
+      <div class="callout-title">Firms remain accountable for the security, confidentiality, and integrity of customer information even when technology and services are outsourced. A vendor's notification promise is not a safeguard.</div>
+      <div class="callout-body">The SEC and FINRA have unified their emphasis on non-delegable accountability. The 2024 amendments move beyond privacy policies to require verifiable technical safeguards — an Incident Response Program with detection capabilities, a Service Provider Oversight framework with contractual notification requirements, and recordkeeping sufficient to support SEC examination. SplitSecure provides the architectural foundation for all three: protocol-level oversight of vendor access, cryptographic audit observations generated before any action executes, and no persistent credentials that could be improperly accessed or disclosed.</div>
+    </div>
+    <div class="g2">
+      <div class="surf" style="background:#FAECE7">
+        <div class="st">What creates Reg S-P exposure</div>
+        <div class="sd" style="color:#712B13">A service provider with standing access to customer NPI who can act unilaterally. A 72-hour notification window that depends on the vendor's own detection and disclosure. Log-based audit trails that an attacker with admin rights can alter. Persistent credentials that remain accessible after an employee departure or system disposal.</div>
+        <div style="margin-top:8px"><span class="badge fail-bg">Vendor-dependent accountability</span></div>
+      </div>
+      <div class="surf">
+        <div class="st">What SplitSecure provides</div>
+        <div class="sd">No vendor holds standing access to customer NPI — every vendor action requires a live internal quorum from the firm's own devices. Unauthorized access attempts are visible in real time as proposals without quorum authorization. No persistent credential to improperly disclose. Cryptographic audit observations generated before any action executes.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Cryptographic sovereignty — non-delegable</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Key requirements addressed</div>
+    <div class="req-row">
+      <div class="req-section">Safeguards Rule</div>
+      <div class="req-body"><div class="req-title">Verify user identity — phishing-resistant authentication</div><div class="req-desc">Phishing-resistant, asymmetric hardware-attested passkeys (WebAuthn / FIDO2) verify the identity of anyone accessing customer systems. No underlying password to phish, harvest, or replay. Every authentication event is bound to a unique hardware-attested device.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Service Provider Rule</div>
+      <div class="req-body"><div class="req-title">Oversee third parties — live internal quorum for vendor access</div><div class="req-desc">MSPs and custodians cannot access customer NPI unilaterally. Every vendor access requires a live internal quorum from the firm's own attested devices. The firm retains cryptographic sovereignty — vendor access is protocol-enforced, not contractually promised.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Incident Response</div>
+      <div class="req-body"><div class="req-title">72-hour notification — real-time firm-controlled detection</div><div class="req-desc">Unauthorized access attempts appear in the firm's audit trail in real time as proposals without quorum authorization. The firm does not depend on the vendor's own detection and disclosure — the access mechanism itself surfaces the attempt. Detection is architectural, not vendor-reported.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Exceeds</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Recordkeeping</div>
+      <div class="req-body"><div class="req-title">5-year retention — SHA3-512 tamper-evident audit observations</div><div class="req-desc">Every access event automatically generates a SHA3-512 hashed, signed audit observation — sufficient to meet the amended 5-year recordkeeping standard. Machine-readable and exportable for SEC examination. Tamper-evident by construction.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+    <div class="req-row">
+      <div class="req-section">Disposal Rule</div>
+      <div class="req-body"><div class="req-title">Prevent data exposure at disposal — no persistent plaintext credentials</div><div class="req-desc">No persistent plaintext keys exist on disk. Deleting a shareholder device cryptographically shreds the means of access to customer data — the Shamir share on that device is destroyed and the threshold can no longer be met without re-enrollment. Disposal is architecturally complete.</div></div>
+      <div class="req-status"><span class="badge ok-bg">Satisfied</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ REQUIREMENT MAPPING ═══ -->
+<div id="pg-mapping" class="page">
+  <div class="hero">
+    <div class="eye">Requirement mapping</div>
+    <div class="hh">SEC Reg S-P 2024 — requirement by requirement</div>
+    <div class="hs">A precise mapping of each amended Reg S-P requirement to SplitSecure's architecture, the mechanism that satisfies it, and the evidence produced for SEC examination.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Safeguards, service provider oversight, and recordkeeping</div>
+    <table class="map-table">
+      <thead>
+        <tr>
+          <th>Requirement</th>
+          <th>Mandate</th>
+          <th class="ss">SplitSecure mechanism</th>
+          <th>Evidence produced</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="sec-col">Safeguards Rule — Authentication</td>
+          <td class="req-col">Phishing-resistant authentication for all access to customer NPI systems</td>
+          <td class="ss-col">WebAuthn / FIDO2 passkeys bound to hardware-attested runtimes. No underlying password. Every authentication event cryptographically bound to a unique physical device — push bombing, credential harvesting, and replay attacks have no surface.</td>
+          <td class="meth-col">Hardware attestation certificate per authentication; FIDO2 passkey registration records</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Service Provider Rule</td>
+          <td class="req-col">Firms remain accountable for NPI security even when outsourced — contractual notification requirements</td>
+          <td class="ss-col">Vendors never hold standing access to customer NPI. Every vendor action requires a live internal quorum from the firm's own attested devices. Cryptographic sovereignty is architectural — vendor access control does not depend on the vendor's own security practices.</td>
+          <td class="meth-col">Vendor access oversight export; quorum approval records for all third-party actions</td>
+          <td><span class="badge ok-bg">Exceeds</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Incident Response Program</td>
+          <td class="req-col">Written IRP to detect, assess, and respond to unauthorized access or use of customer information</td>
+          <td class="ss-col">Unauthorized access attempts surface in the firm's audit trail in real time as proposals without quorum authorization. Detection is architectural — the access mechanism surfaces attempts before they can execute. The firm does not depend on vendor detection or disclosure.</td>
+          <td class="meth-col">Real-time proposal log including failed and unauthorized attempts; quorum failure records</td>
+          <td><span class="badge ok-bg">Exceeds</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">72-Hour Notification</td>
+          <td class="req-col">Service providers must notify covered institution within 72 hours of becoming aware of a breach</td>
+          <td class="ss-col">SplitSecure's architecture surfaces unauthorized access attempts in the firm's own audit trail in real time — the firm does not wait for vendor notification. Any proposal that fails quorum authorization is logged immediately with the requesting identity and system.</td>
+          <td class="meth-col">Failed proposal log with timestamps; real-time anomaly detection export</td>
+          <td><span class="badge ok-bg">Exceeds</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Recordkeeping — 5 Years</td>
+          <td class="req-col">All customer information access events retained for 5 years — sufficient for SEC examination</td>
+          <td class="ss-col">Every access event automatically generates a SHA3-512 hashed, cryptographically signed audit observation. Immutable, machine-readable, and exportable. Hash chain makes tampering mathematically detectable. Retained per configurable policy with verifiable chain of custody.</td>
+          <td class="meth-col">SHA3-512 hashed tamper-evident audit trail; 5-year retention attestation; SIEM export</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Disposal Rule</td>
+          <td class="req-col">Protect against unauthorized access to customer NPI during disposal of physical and electronic records</td>
+          <td class="ss-col">No persistent plaintext credential exists to be improperly disposed of. Removing a device from the quorum configuration immediately eliminates that device's Shamir share. The means of access is cryptographically destroyed at the moment of device removal — disposal is architecturally complete.</td>
+          <td class="meth-col">Device removal audit record; quorum membership change log with timestamps</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+        <tr>
+          <td class="sec-col">Written IRP — Customer Notification</td>
+          <td class="req-col">Notify affected customers within 30 days of discovery of unauthorized access to sensitive customer information</td>
+          <td class="ss-col">Cryptographic audit observations provide a forensic-grade record of exactly which accounts were accessed, by whom, and when — supporting rapid customer notification within the 30-day window. Per-customer access logs filterable for regulatory submission.</td>
+          <td class="meth-col">Per-customer access log; affected account identification report; forensic reconstruction export</td>
+          <td><span class="badge ok-bg">Satisfied</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ VENDOR OVERSIGHT ═══ -->
+<div id="pg-vendor" class="page">
+  <div class="hero">
+    <div class="eye">Service provider rule — vendor oversight</div>
+    <div class="hh">Protocol-level oversight replacing the notification promise</div>
+    <div class="hs">Under the 2024 amendments, firms remain accountable for the security of customer NPI even when technology and services are outsourced. SplitSecure replaces contractual notification requirements with architectural controls — the firm sees vendor access in real time and authorizes it through a live internal quorum.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">The ultimate accountability problem</div>
+    <div class="callout">
+      <div class="callout-eye">SEC and FINRA unified guidance — 2024</div>
+      <div class="callout-title">Firms remain accountable for the security, confidentiality, and integrity of customer information even when technology and services are outsourced. A vendor's 72-hour notification promise is not a safeguard — it is a post-breach obligation.</div>
+      <div class="callout-body">The 72-hour notification requirement acknowledges that vendor breaches will happen. It does not prevent them. A service provider with standing access to customer NPI systems can act unilaterally — or be compromised and used to act unilaterally — without the firm's knowledge until the 72-hour clock starts. By then, customer NPI has already been exposed. SplitSecure eliminates standing vendor access entirely. Every vendor action requires a live internal quorum from the firm's own attested devices. The firm sees the vendor access request before it executes — not after the breach.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">How SplitSecure enforces protocol-level vendor oversight</div>
+    <div class="step-flow">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Vendor initiates a context-aware proposal</div>
+          <div class="step-desc">When a cloud host, custodian, or MSP needs to access a customer NPI system, they initiate a proposal specifying exactly what they need to do, on which system, and for how long. The proposal is visible to the firm's approval team before any access is granted. Nothing executes until the quorum is met.</div>
+          <span class="step-badge">Firm sees access request before it executes</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Internal team reviews and authorizes on firm-controlled devices</div>
+          <div class="step-desc">The firm's own compliance or security team reviews the vendor proposal on hardware-attested devices and votes to authorize. Each vote is cryptographically signed by the approver's device. The vendor cannot self-authorize — the quorum must include internal firm parties on devices the firm controls.</div>
+          <span class="step-badge">Non-delegable — firm retains cryptographic sovereignty</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Ephemeral access — scoped, time-limited, and fully logged</div>
+          <div class="step-desc">Once the quorum is met, the vendor receives ephemeral access scoped to the approved system and action. The credential is reconstructed inside an attested runtime for that operation and immediately discarded. The complete authorization chain is recorded as a tamper-evident cryptographic observation.</div>
+          <span class="step-badge">No standing vendor access — ever</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Unauthorized attempts surface in real time</div>
+          <div class="step-desc">If a vendor attempts to access customer NPI systems without initiating a proposal — or initiates a proposal that fails to achieve quorum — the attempt is logged immediately in the firm's own audit trail. The firm does not wait for a 72-hour vendor notification. Detection is architectural.</div>
+          <span class="step-badge">Real-time detection — not vendor-dependent</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Eliminating vendor single points of failure</div>
+    <div class="g2">
+      <div class="surf"><div class="st">The SPoF problem under Reg S-P</div><div class="sd">A service provider that holds standing credentials to customer NPI systems is a single point of failure. One breach of the provider simultaneously exposes every customer's data. Under the service provider rule, the firm is accountable for that breach — even if the firm had no visibility into the vendor's security practices.</div><div style="margin-top:8px"><span class="badge fail-bg">Vendor-originated exposure</span></div></div>
+      <div class="surf"><div class="st">How SplitSecure eliminates the SPoF</div><div class="sd">Keys are split across the firm and the vendor — the vendor holds fragments, not complete credentials. A breach of the vendor's systems exposes key fragments insufficient to reconstruct the means of access. The firm's internal quorum participation is required for any access to customer NPI. The vendor is not a single point of failure.</div><div style="margin-top:8px"><span class="badge ok-bg">SPoF eliminated architecturally</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INCIDENT RESPONSE ═══ -->
+<div id="pg-incident" class="page">
+  <div class="hero">
+    <div class="eye">Incident response program</div>
+    <div class="hh">Detection and forensic integrity for the 30-day customer notification window</div>
+    <div class="hs">Reg S-P now mandates a written incident response program designed to detect and assess unauthorized access to customer information. Traditional text logs are often incomplete or easily modified — making assessment within the 30-day customer notification window unreliable. SplitSecure provides forensic-grade evidence generated by the access mechanism itself.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">The detection and assessment problem</div>
+    <div class="callout">
+      <div class="callout-eye">SEC Reg S-P — written incident response program</div>
+      <div class="callout-title">An incident response program that depends on log files an attacker with admin rights can alter is not a detection capability — it is a documentation exercise.</div>
+      <div class="callout-body">Traditional text-based audit logs are often the first thing an attacker deletes or modifies after gaining administrative access. An IRP that relies on these logs cannot reliably detect unauthorized access, assess its scope, or meet the 30-day customer notification window with confidence. SplitSecure's audit observations are generated by the access mechanism itself — before any action executes. They are SHA3-512 hashed, signed by a rotating signer, and chain-linked. An attacker with administrative rights cannot alter them without making the modification mathematically detectable.</div>
+    </div>
+    <div class="g2">
+      <div class="surf" style="background:#FAECE7">
+        <div class="st">What traditional IRPs rely on</div>
+        <div class="sd" style="color:#712B13">Log files that an attacker with admin rights can alter, truncate, or delete. SIEM alerts that depend on the completeness of the underlying log data. Vendor notification that may arrive 72 hours after the breach. Point-in-time forensic analysis after the fact — often incomplete and contested.</div>
+        <div style="margin-top:8px"><span class="badge fail-bg">Log-dependent — alterable</span></div>
+      </div>
+      <div class="surf">
+        <div class="st">What SplitSecure provides</div>
+        <div class="sd">Cryptographic audit observations generated before any action executes. SHA3-512 hash chain — any modification is mathematically detectable. Unauthorized access attempts logged in real time as failed proposals. Per-account access log filterable for customer notification. Forensic-grade evidence available from the moment of the incident — not assembled after the fact.</div>
+        <div style="margin-top:8px"><span class="badge ok-bg">Tamper-evident — forensic grade</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">What the IRP evidence supports</div>
+    <div class="prow">
+      <div class="pnum">01</div>
+      <div>
+        <div class="pt">Detection — unauthorized access attempts logged in real time</div>
+        <div class="pd">Any vendor or user who attempts to access customer NPI without a valid quorum authorization generates a failed proposal record in the firm's audit trail immediately. The firm's IRP is triggered by the architecture — not by a vendor notification or a post-hoc log review.</div>
+        <div class="pev">Evidence: failed proposal log with timestamps, requesting identity, and target system</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">02</div>
+      <div>
+        <div class="pt">Assessment — complete forensic reconstruction of any access event</div>
+        <div class="pd">Every access event includes the requesting identity, the approving devices and their hardware attestation proofs, the target system, the action taken, and the timestamp — all cryptographically bound. The scope of any unauthorized access is reconstructible from the audit record alone.</div>
+        <div class="pev">Evidence: cryptographic audit observation with full authorization chain per event</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">03</div>
+      <div>
+        <div class="pt">Customer notification — per-customer access log for 30-day window</div>
+        <div class="pd">The audit trail is filterable by customer account, system, and date range. For any identified breach, the firm can generate a per-customer report of which accounts were accessed, when, and by whom — supporting the 30-day customer notification requirement with verifiable evidence.</div>
+        <div class="pev">Evidence: per-customer access log exportable for notification support</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">04</div>
+      <div>
+        <div class="pt">SEC examination — forensic-grade evidence for examiners</div>
+        <div class="pd">SHA3-512 tamper-evident audit trail exportable in machine-readable format for SEC examination. Every record includes unforgeable attribution — which device proposed, which devices approved, and the hardware attestation proof for each. Evidence is available from day one — not assembled under examination pressure.</div>
+        <div class="pev">Evidence: SHA3-512 audit trail, hardware attestation proofs, SIEM-compatible export</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EVIDENCE ═══ -->
+<div id="pg-evidence" class="page">
+  <div class="hero">
+    <div class="eye">Evidence suite</div>
+    <div class="hh">SEC examination-ready evidence generated by the access mechanism</div>
+    <div class="hs">SplitSecure generates cryptographically signed audit observations as a byproduct of every access event. Not assembled for examination — produced by the mechanism itself. Every record is immutable, tamper-evident, and independently verifiable.</div>
+    <div class="btns">
+      <button class="bp" onclick="sw(document.querySelectorAll('.tab')[5],'checklist')">Generate compliance report ↗</button>
+      <button class="bs">Download sample export</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">What the audit record contains</div>
+    <div class="terminal">
+      <div class="term-hdr">
+        <div class="td-dot" style="background:#ff5f57"></div>
+        <div class="td-dot" style="background:#ffbd2e"></div>
+        <div class="td-dot" style="background:#28c840"></div>
+        <span class="term-lbl">splitsecure_regsp_audit_observation.json — Reg S-P compliant NPI access record</span>
+      </div>
+      <div class="term-body">
+        <div>{</div>
+        <div class="i1"><span class="tk">"observation_id"</span>: <span class="ts">"obs_01HXKP9M2N4Q8R7T6V3W"</span>,</div>
+        <div class="i1"><span class="tk">"timestamp"</span>: <span class="ts">"2026-04-14T09:23:41.882Z"</span>,</div>
+        <div class="i1"><span class="tk">"reg_sp_requirements_satisfied"</span>: [<span class="ts">"Safeguards"</span>, <span class="ts">"ServiceProvider"</span>, <span class="ts">"Recordkeeping"</span>, <span class="ts">"IRP"</span>],</div>
+        <div class="i1"><span class="tk">"action_type"</span>: <span class="ts">"npi_system_access"</span>,</div>
+        <div class="i1"><span class="tk">"initiating_identity"</span>: <span class="ts">"user:advisor@ria-firm.com"</span>,</div>
+        <div class="i1"><span class="tk">"vendor_action"</span>: <span class="tv">false</span>, <span class="tc">// Service Provider Rule — flag for third-party access</span></div>
+        <div class="i1"><span class="tk">"quorum_required"</span>: <span class="tv">2</span>, <span class="tc">// Safeguards Rule — phishing-resistant multi-party enforcement</span></div>
+        <div class="i1"><span class="tk">"quorum_achieved"</span>: <span class="tv">2</span>,</div>
+        <div class="i1"><span class="tk">"approvals"</span>: [</div>
+        <div class="i2">{ <span class="tk">"device_id"</span>: <span class="ts">"yubikey-A9F2"</span>, <span class="tk">"hw_attested"</span>: <span class="tv">true</span>, <span class="tk">"sig"</span>: <span class="ts">"3045022100..."</span> },</div>
+        <div class="i2">{ <span class="tk">"device_id"</span>: <span class="ts">"mobile-D3C1"</span>, <span class="tk">"hw_attested"</span>: <span class="tv">true</span>, <span class="tk">"sig"</span>: <span class="ts">"3044022079..."</span> }</div>
+        <div class="i1">],</div>
+        <div class="i1"><span class="tk">"credential_stored"</span>: <span class="tv">false</span>, <span class="tc">// Disposal Rule — no persistent NPI access credential</span></div>
+        <div class="i1"><span class="tk">"secret_ephemeral"</span>: <span class="tv">true</span>, <span class="tc">// reconstructed for one operation, discarded immediately</span></div>
+        <div class="i1"><span class="tk">"observation_hash"</span>: <span class="ts">"sha3-512:a4f8c2..."</span>, <span class="tc">// Recordkeeping — tamper-evident, 5-year retention</span></div>
+        <div class="i1"><span class="tk">"tamper_evident"</span>: <span class="tv">true</span>,</div>
+        <div class="i1"><span class="tk">"retention_policy"</span>: <span class="ts">"5-years"</span> <span class="tc">// amended Reg S-P retention standard</span></div>
+        <div>}</div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="surf"><div class="st">What SEC examiners can verify</div><div class="sd">That authentication was phishing-resistant and hardware-attested (Safeguards Rule). That vendor access was gated by internal quorum authorization (Service Provider Rule). That no persistent NPI credential was stored (Disposal Rule). That the record is tamper-evident and retained per the 5-year standard (Recordkeeping). That the action is attributable to specific named individuals and devices (IRP).</div></div>
+      <div class="surf"><div class="st">Unforgeable attribution</div><div class="sd">Every vote and proposal is cryptographically bound to an attested runtime. Each device signature is independently verifiable using the device's public key. A record cannot be created after the fact without access to all approving devices at the time of the action. Attribution cannot be fabricated or shared.</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Evidence types for SEC examination</div>
+    <div class="prow">
+      <div class="pnum">01</div>
+      <div>
+        <div class="pt">Single point of failure analysis — Safeguards Rule</div>
+        <div class="pd">Architectural proof that no single device or vendor compromise can expose customer NPI. No complete NPI access credential exists. Every access requires a quorum of independent device signatures — the SPoF is architecturally eliminated.</div>
+        <div class="pev">Evidence: architectural attestation, Shamir shard distribution record</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">02</div>
+      <div>
+        <div class="pt">Vendor access oversight export — Service Provider Rule</div>
+        <div class="pd">Filtered report of all third-party service provider access to customer NPI systems. Documents every vendor action with the internal quorum approval that authorized it. Confirms no vendor held standing access and no vendor action executed without firm authorization.</div>
+        <div class="pev">Export format: PDF, CSV · Filterable by vendor, system, date range</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">03</div>
+      <div>
+        <div class="pt">Hardware attestation audit — Safeguards Rule</div>
+        <div class="pd">Confirms all administrative and access events originated from legitimate, unmodified hardware runtimes — mitigating AI-generated deepfake and push-bombing risks. Each observation includes the hardware attestation certificate for every approving device.</div>
+        <div class="pev">Attestation certificate per event · Apple App Attest, Android Key Attest, AWS Nitro</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">04</div>
+      <div>
+        <div class="pt">5-year tamper-evident audit trail — Recordkeeping</div>
+        <div class="pd">SHA3-512 hashed observations of all NPI access events, retained per the amended 5-year standard. Hash chain integrity verifiable by SEC examiners — any modification is mathematically detectable. Exportable in machine-readable format for examination submission.</div>
+        <div class="pev">Export format: JSON, CSV, SIEM-compatible · 5-year retention policy</div>
+      </div>
+    </div>
+    <div class="prow">
+      <div class="pnum">05</div>
+      <div>
+        <div class="pt">Cryptographic sovereignty attestation — Service Provider Rule</div>
+        <div class="pd">Technical document audited by Tetrel Security confirming SplitSecure cannot access customer data or reconstruct NPI access credentials, the architecture is protocol-enforced rather than contractually promised, and vendor sovereignty is mathematically eliminated.</div>
+        <div class="pev">Audited by Tetrel Security · Available on request</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CHECKLIST ═══ -->
+<div id="pg-checklist" class="page">
+  <div class="hero">
+    <div class="eye">Reg S-P readiness</div>
+    <div class="hh">Generate your SEC Reg S-P compliance evidence report</div>
+    <div class="hs">Generate an examination-ready report documenting SplitSecure's satisfaction of the amended Regulation S-P safeguards, service provider oversight, incident response, and recordkeeping requirements.</div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Compliance deadlines</div>
+    <div class="deadline-box" style="margin-bottom:20px">
+      <div class="deadline">
+        <div class="dl-date">December 3, 2025</div>
+        <div class="dl-label">Larger entities — $1.5B+ AUM</div>
+        <div class="dl-desc">RIAs and broker-dealers with $1.5B+ AUM. Full compliance with safeguards rule, service provider oversight, incident response program, and 5-year recordkeeping requirements now required.</div>
+      </div>
+      <div class="deadline">
+        <div class="dl-date">June 3, 2026</div>
+        <div class="dl-label">Smaller entities</div>
+        <div class="dl-desc">All other covered institutions. Same requirements apply. Entities subject to this deadline should be in implementation now — deployment and evidence generation take time.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Reg S-P readiness checklist — SplitSecure coverage</div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Single point of failure analysis — Safeguards Rule</div>
+        <div class="ci-desc">Architectural proof that no single device or vendor compromise can expose customer NPI. No complete NPI access credential exists. Every access requires a quorum of independent hardware-attested device signatures.</div>
+        <div class="ci-ev">Evidence: architectural attestation, Shamir shard distribution record</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Vendor access oversight — all third-party access gated by internal quorum — Service Provider Rule</div>
+        <div class="ci-desc">Filtered report confirming all third-party service provider access to customer NPI systems was authorized by a live internal quorum from firm-controlled devices. No vendor held standing access. No vendor action executed without firm authorization.</div>
+        <div class="ci-ev">Evidence: vendor access oversight export, quorum approval records per vendor event</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Hardware attestation — all access from unmodified legitimate devices — Safeguards Rule</div>
+        <div class="ci-desc">Hardware attestation certificates confirming all NPI access events originated from legitimate, unmodified device runtimes. Mitigates AI-generated deepfake and push-bombing risks identified in the SEC's guidance on phishing-resistant authentication.</div>
+        <div class="ci-ev">Evidence: hardware attestation proof per event</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Real-time detection of unauthorized access attempts — IRP</div>
+        <div class="ci-desc">Failed proposal log confirms unauthorized access attempts are surfaced in real time in the firm's own audit trail — not dependent on vendor notification. Supports the written IRP's detection and assessment requirements.</div>
+        <div class="ci-ev">Evidence: failed proposal log, real-time anomaly detection export</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">5-year tamper-evident audit trail — Recordkeeping</div>
+        <div class="ci-desc">SHA3-512 hashed tamper-evident audit trail meeting the amended 5-year retention standard. Machine-readable and exportable for SEC examination. Hash chain integrity verifiable — any modification mathematically detectable.</div>
+        <div class="ci-ev">Evidence: SHA3-512 audit trail, hash chain integrity report, SIEM export</div>
+      </div>
+    </div>
+    <div class="checklist-item">
+      <div class="ci-check">✓</div>
+      <div>
+        <div class="ci-title">Cryptographic sovereignty — provider has zero NPI access — Service Provider Rule</div>
+        <div class="ci-desc">Technical document confirming SplitSecure cannot access customer data or reconstruct NPI access credentials. Vendor sovereignty is architectural — not contractually promised. Audited by Tetrel Security.</div>
+        <div class="ci-ev">Evidence: cryptographic sovereignty attestation, Tetrel Security audit report</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="slbl">Generate your evidence report</div>
+    <div class="g2" style="margin-bottom:12px">
+      <div class="surf">
+        <div class="st" style="margin-bottom:10px">Requirements to include</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Safeguards Rule — authentication and access controls</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Service Provider Rule — vendor oversight</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Incident Response Program — detection and assessment</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Recordkeeping — 5-year retention</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Disposal Rule — credential lifecycle</label>
+        </div>
+      </div>
+      <div class="surf">
+        <div class="st" style="margin-bottom:10px">Report options</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div>
+            <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Date range</div>
+            <div style="display:flex;gap:8px">
+              <input type="date" style="flex:1;padding:6px 10px;font-size:12px;border:0.5px solid #e0e0e0;border-radius:6px;font-family:inherit">
+              <input type="date" style="flex:1;padding:6px 10px;font-size:12px;border:0.5px solid #e0e0e0;border-radius:6px;font-family:inherit">
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Export format</div>
+            <div style="display:flex;gap:6px">
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="radio" name="fmt" checked style="accent-color:#534AB7"> PDF</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="radio" name="fmt" style="accent-color:#534AB7"> JSON</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="radio" name="fmt" style="accent-color:#534AB7"> CSV</label>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Include</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Cryptographic sovereignty attestation</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" checked style="accent-color:#534AB7"> Requirement-by-requirement mapping</label>
+              <label style="display:flex;align-items:center;gap:7px;font-size:12px;cursor:pointer"><input type="checkbox" style="accent-color:#534AB7"> Vendor access events only</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="bp">Generate Reg S-P compliance report ↗</button>
+      <button class="bs">Preview sample report</button>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="ft">Need help preparing for an SEC examination?</div>
+  <div class="fd">Our compliance team works with RIAs and broker-dealers to prepare examination-ready Reg S-P evidence packages, conduct vendor oversight gap analyses, and document SplitSecure's architectural satisfaction of the 2024 amended safeguards requirements.</div>
+  <div class="foot-btns">
+    <button class="foot-btn-p">Get in touch ↗</button>
+    <button class="foot-btn-s">Download full Reg S-P brief</button>
+  </div>
+</div>
+
+<script>
+function sw(tab, id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  if (typeof tab === 'object' && tab.classList) tab.classList.add('on');
+  document.getElementById('pg-' + id).classList.add('on');
+}
+document.querySelectorAll('.tab').forEach((tab, i) => {
+  const ids = ['overview','mapping','vendor','incident','evidence','checklist'];
+  tab.onclick = function() { sw(this, ids[i]); };
+});
+</script>
+</body>
+</html>
